@@ -1,0 +1,1618 @@
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  
+  /* DARK MODE (default) — red outlines, grey interior */
+  :root {
+    --bg: #2A2A2A;
+    --card: #363636;
+    --card-2: #424242;
+    --text: #F5F5F5;
+    --text-soft: #A8A8A8;
+    --accent: #EF4444;
+    --accent-dark: #B91C1C;
+    --accent-light: #4A1F1F;
+    --border: #DC2626;
+    --border-soft: #7F1D1D;
+    --bubble-mine: #DC2626;
+    --bubble-mine-text: #FFFFFF;
+    --bubble-theirs: #4A4A4A;
+    --bubble-theirs-text: #F5F5F5;
+    --chat-bg: #1F1F1F;
+    --shadow: 0 1px 3px rgba(0,0,0,0.4);
+    --shadow-strong: 0 12px 32px rgba(0,0,0,0.5);
+    --danger: #EF4444;
+    --input-bg: #2A2A2A;
+    --hover: #424242;
+    --section-bg: #2F2F2F;
+  }
+  
+  /* LIGHT MODE — red outlines, cream-red interior */
+  [data-theme="light"] {
+    --bg: #FFE4D6;
+    --card: #FFF5EE;
+    --card-2: #FFFFFF;
+    --text: #2D1410;
+    --text-soft: #8B5A4F;
+    --accent: #DC2626;
+    --accent-dark: #991B1B;
+    --accent-light: #FEE2E2;
+    --border: #DC2626;
+    --border-soft: #FCA5A5;
+    --bubble-mine: #DC2626;
+    --bubble-mine-text: #FFFFFF;
+    --bubble-theirs: #FFFFFF;
+    --bubble-theirs-text: #2D1410;
+    --chat-bg: #F5C6B0;
+    --shadow: 0 1px 3px rgba(220, 38, 38, 0.12);
+    --shadow-strong: 0 12px 32px rgba(220, 38, 38, 0.18);
+    --danger: #B91C1C;
+    --input-bg: #FFFFFF;
+    --hover: #FFE0D0;
+    --section-bg: #FFEEDF;
+  }
+  
+  html, body {
+    height: 100%;
+    font-family: 'Hiragino Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.2s, color 0.2s;
+  }
+  
+  #app {
+    height: 100vh; width: 100%;
+    display: flex; flex-direction: column;
+    max-width: 480px; margin: 0 auto;
+    background: var(--bg);
+    position: relative; overflow: hidden;
+  }
+  
+  /* AUTH */
+  .auth-screen {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 32px 24px;
+    background: linear-gradient(180deg, #DC2626 0%, #7F1D1D 100%);
+    color: white;
+  }
+  .logo {
+    width: 88px; height: 88px; border-radius: 50%;
+    background: white; display: flex;
+    align-items: center; justify-content: center;
+    margin-bottom: 16px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+    border: 3px solid #FCA5A5;
+  }
+  .logo::after {
+    content: ''; width: 28px; height: 28px;
+    border-radius: 50%; background: #DC2626;
+  }
+  .brand { font-size: 36px; font-weight: 800; letter-spacing: -1px; }
+  .tagline { font-size: 14px; opacity: 0.9; margin: 4px 0 32px; }
+  .auth-card {
+    background: var(--card); border-radius: 20px;
+    padding: 28px 24px; width: 100%; max-width: 360px;
+    box-shadow: var(--shadow-strong); color: var(--text);
+    border: 2px solid var(--border);
+  }
+  .auth-tabs {
+    display: flex; background: var(--bg);
+    border-radius: 12px; padding: 4px; margin-bottom: 24px;
+    border: 1px solid var(--border-soft);
+  }
+  .auth-tab {
+    flex: 1; padding: 10px; text-align: center;
+    border-radius: 8px; font-size: 14px; font-weight: 600;
+    cursor: pointer; color: var(--text-soft);
+    border: none; background: transparent; font-family: inherit;
+    transition: all 0.2s;
+  }
+  .auth-tab.active { background: var(--accent); color: white; }
+  
+  .field { margin-bottom: 14px; }
+  .field label {
+    display: block; font-size: 12px; font-weight: 700;
+    color: var(--accent); margin-bottom: 6px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .field input {
+    width: 100%; padding: 14px 16px;
+    border: 2px solid var(--border); border-radius: 12px;
+    font-size: 15px; font-family: inherit; outline: none;
+    background: var(--input-bg); color: var(--text);
+    transition: border-color 0.2s;
+  }
+  .field input:focus { border-color: var(--accent-dark); box-shadow: 0 0 0 3px var(--accent-light); }
+  
+  .btn-primary {
+    padding: 14px 20px;
+    background: var(--accent); color: white;
+    border: 2px solid var(--accent-dark); border-radius: 12px;
+    font-size: 15px; font-weight: 700;
+    cursor: pointer; font-family: inherit;
+    transition: all 0.15s;
+  }
+  .btn-primary.full { width: 100%; margin-top: 8px; }
+  .btn-primary:hover { background: var(--accent-dark); }
+  .btn-primary:active { transform: scale(0.98); }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+  
+  .alert {
+    padding: 10px 14px; border-radius: 10px;
+    font-size: 13px; margin-bottom: 12px; display: none;
+    border: 1px solid var(--accent);
+    background: var(--accent-light); color: var(--accent);
+  }
+  .alert.show { display: block; }
+  
+  /* HEADER */
+  .header {
+    background: var(--card); border-bottom: 2px solid var(--border);
+    padding: 14px 16px; display: flex;
+    align-items: center; gap: 12px;
+    min-height: 56px; z-index: 10;
+  }
+  .header-title { font-size: 19px; font-weight: 700; flex: 1; color: var(--text); }
+  .header-btn {
+    background: var(--accent); border: 2px solid var(--accent-dark);
+    cursor: pointer; padding: 0; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-family: inherit;
+    width: 36px; height: 36px; font-size: 22px; font-weight: 700;
+    transition: all 0.15s;
+  }
+  .header-btn:hover { background: var(--accent-dark); }
+  
+  /* LISTS */
+  .list-screen { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--card); }
+  .scroll-list { flex: 1; overflow-y: auto; }
+  .section-label {
+    padding: 10px 16px; font-size: 12px; font-weight: 700;
+    color: var(--accent); text-transform: uppercase;
+    letter-spacing: 0.8px; background: var(--section-bg);
+    border-top: 1px solid var(--border-soft);
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .row {
+    display: flex; align-items: center;
+    padding: 12px 16px; gap: 12px;
+    cursor: pointer; border-bottom: 1px solid var(--border-soft);
+    transition: background 0.15s;
+    background: var(--card);
+  }
+  .row.no-click { cursor: default; }
+  .row:not(.no-click):hover { background: var(--hover); }
+  
+  .avatar {
+    width: 48px; height: 48px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 18px;
+    flex-shrink: 0; border: 2px solid var(--border);
+  }
+  .row-info { flex: 1; min-width: 0; }
+  .row-name {
+    font-size: 15px; font-weight: 600; margin-bottom: 2px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    display: flex; align-items: center; gap: 6px;
+    color: var(--text);
+  }
+  .row-sub {
+    font-size: 13px; color: var(--text-soft);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .row-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .row-time { font-size: 11px; color: var(--text-soft); }
+  
+  .bot-tag {
+    background: var(--accent); color: white;
+    font-size: 9px; font-weight: 800;
+    padding: 1px 6px; border-radius: 4px;
+    letter-spacing: 0.5px;
+    border: 1px solid var(--accent-dark);
+  }
+  
+  .empty-state { padding: 50px 24px; text-align: center; color: var(--text-soft); }
+  .empty-state .emoji { font-size: 48px; margin-bottom: 12px; }
+  .empty-state-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .empty-state-text { font-size: 13px; line-height: 1.5; margin-bottom: 16px; }
+  
+  /* TAB BAR */
+  .tab-bar {
+    display: flex; background: var(--card);
+    border-top: 2px solid var(--border); padding: 6px 0 8px;
+  }
+  .tab {
+    flex: 1; background: transparent; border: none;
+    padding: 6px; cursor: pointer; position: relative;
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    color: var(--text-soft); font-family: inherit;
+    font-size: 11px; font-weight: 600; transition: color 0.15s;
+  }
+  .tab.active { color: var(--accent); }
+  .tab .icon { font-size: 22px; line-height: 1; }
+  .tab-badge {
+    position: absolute; top: 0; right: calc(50% - 22px);
+    background: var(--accent); color: white;
+    font-size: 10px; font-weight: 700;
+    padding: 1px 6px; border-radius: 10px;
+    min-width: 18px; text-align: center;
+    border: 2px solid var(--card);
+  }
+  
+  /* CHAT */
+  .chat-screen {
+    position: absolute; inset: 0;
+    background: var(--chat-bg);
+    display: flex; flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.25s ease-out;
+    z-index: 20;
+  }
+  .chat-screen.open { transform: translateX(0); }
+  
+  .chat-header {
+    background: var(--card);
+    border-bottom: 2px solid var(--border);
+    padding: 10px 12px; display: flex;
+    align-items: center; gap: 10px; min-height: 56px;
+  }
+  .back-btn {
+    width: 36px; height: 36px; border: none;
+    background: transparent; cursor: pointer; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; color: var(--accent); font-family: inherit;
+    font-weight: 700;
+  }
+  .back-btn:hover { background: var(--hover); }
+  .chat-avatar { width: 36px; height: 36px; border-radius: 12px; font-size: 14px; }
+  .chat-name-block { flex: 1; min-width: 0; }
+  .chat-name {
+    font-size: 16px; font-weight: 700;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    display: flex; align-items: center; gap: 6px;
+    color: var(--text);
+  }
+  .chat-handle { font-size: 12px; color: var(--text-soft); }
+  
+  .messages {
+    flex: 1; overflow-y: auto; padding: 16px 12px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .msg-row {
+    display: flex; margin-bottom: 2px; max-width: 100%;
+    align-items: flex-end; gap: 6px;
+  }
+  .msg-row.mine { justify-content: flex-end; }
+  .msg-avatar { width: 36px; height: 36px; border-radius: 12px; font-size: 14px; flex-shrink: 0; }
+  .bubble-wrap { display: flex; flex-direction: column; max-width: 70%; }
+  .msg-row.mine .bubble-wrap { align-items: flex-end; }
+  .msg-row.theirs .bubble-wrap { align-items: flex-start; }
+  
+  .bubble {
+    padding: 9px 13px; border-radius: 18px;
+    font-size: 14.5px; line-height: 1.4;
+    word-wrap: break-word; overflow-wrap: anywhere;
+    white-space: pre-wrap;
+    border: 2px solid var(--border);
+  }
+  .msg-row.mine .bubble {
+    background: var(--bubble-mine);
+    color: var(--bubble-mine-text);
+    border-bottom-right-radius: 4px;
+  }
+  .msg-row.theirs .bubble {
+    background: var(--bubble-theirs);
+    color: var(--bubble-theirs-text);
+    border-bottom-left-radius: 4px;
+  }
+  .msg-time {
+    font-size: 10.5px; color: var(--text);
+    opacity: 0.7;
+    margin: 2px 6px 0;
+  }
+  .day-divider {
+    text-align: center; margin: 12px 0 8px;
+    font-size: 11px;
+  }
+  .day-divider span {
+    background: var(--accent); color: white;
+    padding: 4px 12px; border-radius: 12px;
+    border: 1px solid var(--accent-dark);
+    font-weight: 600;
+  }
+  
+  .typing-indicator {
+    display: flex; gap: 4px; padding: 12px 14px;
+    background: var(--bubble-theirs); border-radius: 18px;
+    border-bottom-left-radius: 4px; width: fit-content;
+    border: 2px solid var(--border);
+  }
+  .typing-indicator span {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent); animation: bounce 1.2s infinite;
+  }
+  .typing-indicator span:nth-child(2) { animation-delay: 0.15s; }
+  .typing-indicator span:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes bounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+    30% { transform: translateY(-5px); opacity: 1; }
+  }
+  
+  .composer {
+    background: var(--card); border-top: 2px solid var(--border);
+    padding: 8px 10px; display: flex; gap: 8px; align-items: flex-end;
+  }
+  .composer textarea {
+    flex: 1; border: 2px solid var(--border);
+    border-radius: 20px; padding: 9px 14px;
+    font-size: 15px; font-family: inherit;
+    resize: none; outline: none;
+    max-height: 100px; min-height: 38px; line-height: 1.3;
+    background: var(--input-bg); color: var(--text);
+  }
+  .composer textarea:focus { border-color: var(--accent-dark); }
+  .send-btn {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--accent); color: white;
+    border: 2px solid var(--accent-dark);
+    cursor: pointer; font-size: 18px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s; font-family: inherit;
+  }
+  .send-btn:disabled { background: var(--text-soft); border-color: var(--text-soft); cursor: not-allowed; }
+  .send-btn:not(:disabled):hover { background: var(--accent-dark); }
+  .send-btn:not(:disabled):active { transform: scale(0.92); }
+  
+  /* PROFILE */
+  .profile-screen { flex: 1; overflow-y: auto; background: var(--bg); }
+  .profile-header {
+    background: linear-gradient(180deg, #DC2626 0%, #7F1D1D 100%);
+    padding: 32px 20px 28px; color: white;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+  }
+  .profile-avatar {
+    width: 84px; height: 84px; border-radius: 24px;
+    font-size: 36px; border: 4px solid rgba(255,255,255,0.4);
+  }
+  .profile-name-row { display: flex; align-items: center; gap: 8px; }
+  .profile-name { font-size: 22px; font-weight: 700; }
+  .edit-icon {
+    background: rgba(255,255,255,0.25); border: 1px solid rgba(255,255,255,0.5);
+    color: white;
+    width: 28px; height: 28px; border-radius: 50%;
+    cursor: pointer; font-size: 13px; font-family: inherit;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .edit-icon:hover { background: rgba(255,255,255,0.4); }
+  .profile-handle { font-size: 14px; opacity: 0.9; }
+  .profile-section {
+    background: var(--card); margin-top: 12px;
+    border-top: 2px solid var(--border);
+    border-bottom: 2px solid var(--border);
+  }
+  .profile-row {
+    padding: 14px 18px; border-bottom: 1px solid var(--border-soft);
+    display: flex; justify-content: space-between; align-items: center; font-size: 14px;
+  }
+  .profile-row:last-child { border-bottom: none; }
+  .profile-row .label { color: var(--text-soft); }
+  .profile-row .value { font-weight: 600; color: var(--text); }
+  
+  .toggle {
+    position: relative; width: 48px; height: 26px;
+    background: var(--text-soft); border-radius: 13px;
+    cursor: pointer; transition: background 0.2s;
+    border: 2px solid var(--border);
+    flex-shrink: 0;
+  }
+  .toggle.on { background: var(--accent); }
+  .toggle::after {
+    content: ''; position: absolute;
+    top: 1px; left: 1px;
+    width: 18px; height: 18px;
+    border-radius: 50%; background: white;
+    transition: transform 0.2s;
+  }
+  .toggle.on::after { transform: translateX(22px); }
+  
+  .logout-btn {
+    width: calc(100% - 32px); margin: 16px; padding: 14px;
+    background: var(--card); color: var(--accent);
+    border: 2px solid var(--accent);
+    border-radius: 12px; font-size: 15px; font-weight: 700;
+    cursor: pointer; font-family: inherit;
+    transition: all 0.15s;
+  }
+  .logout-btn:hover { background: var(--accent); color: white; }
+  
+  /* SHEET */
+  .backdrop {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.6); z-index: 30;
+    opacity: 0; pointer-events: none; transition: opacity 0.2s;
+  }
+  .backdrop.open { opacity: 1; pointer-events: auto; }
+  
+  .sheet {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: var(--card); border-radius: 20px 20px 0 0;
+    z-index: 31; transform: translateY(100%);
+    transition: transform 0.25s ease-out;
+    max-height: 85%; display: flex; flex-direction: column;
+    border: 2px solid var(--border);
+    border-bottom: none;
+  }
+  .sheet.open { transform: translateY(0); }
+  .sheet-handle {
+    width: 40px; height: 4px; background: var(--accent);
+    border-radius: 2px; margin: 8px auto 4px;
+  }
+  .sheet-header {
+    padding: 14px 18px 12px;
+    display: flex; align-items: center;
+    border-bottom: 2px solid var(--border);
+  }
+  .sheet-title { font-size: 17px; font-weight: 700; flex: 1; color: var(--text); }
+  .sheet-close {
+    background: transparent; border: 2px solid var(--border);
+    color: var(--accent);
+    width: 32px; height: 32px; border-radius: 50%;
+    font-size: 16px; cursor: pointer; font-family: inherit;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .sheet-close:hover { background: var(--accent); color: white; }
+  .sheet-body { padding: 16px; overflow-y: auto; flex: 1; }
+  
+  .search-input {
+    width: 100%; padding: 12px 14px;
+    border: 2px solid var(--border); border-radius: 12px;
+    font-size: 15px; font-family: inherit; outline: none;
+    background: var(--input-bg); color: var(--text);
+    margin-bottom: 14px;
+  }
+  .search-input:focus { border-color: var(--accent-dark); }
+  
+  .suggestions-list {
+    background: var(--card-2);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .suggestion-row {
+    display: flex; align-items: center;
+    padding: 12px; gap: 12px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .suggestion-row:last-child { border-bottom: none; }
+  .suggestion-row.bot-row { background: var(--accent-light); }
+  
+  .pill-btn {
+    padding: 7px 14px; border: 2px solid transparent; border-radius: 14px;
+    font-size: 12px; font-weight: 700;
+    cursor: pointer; font-family: inherit; transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .pill-btn.primary { background: var(--accent); color: white; border-color: var(--accent-dark); }
+  .pill-btn.primary:hover { background: var(--accent-dark); }
+  .pill-btn.danger { background: var(--card); color: var(--danger); border-color: var(--danger); }
+  .pill-btn.danger:hover { background: var(--danger); color: white; }
+  .pill-btn.muted { background: transparent; color: var(--text-soft); border-color: var(--border-soft); cursor: default; }
+  .btn-group { display: flex; gap: 6px; }
+  
+  /* DIALOG */
+  .dialog {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    background: var(--card); border-radius: 16px;
+    padding: 24px; width: calc(100% - 48px); max-width: 320px;
+    z-index: 32; opacity: 0; pointer-events: none;
+    transition: all 0.2s;
+    border: 2px solid var(--border);
+    box-shadow: var(--shadow-strong);
+  }
+  .dialog.open {
+    opacity: 1; pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .dialog-title { font-size: 17px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+  .dialog-text { font-size: 13px; color: var(--text-soft); margin-bottom: 14px; }
+  .dialog-input {
+    width: 100%; padding: 12px 14px;
+    border: 2px solid var(--border); border-radius: 10px;
+    font-size: 15px; font-family: inherit; outline: none;
+    background: var(--input-bg); color: var(--text);
+  }
+  .dialog-input:focus { border-color: var(--accent-dark); }
+  .dialog-actions { display: flex; gap: 8px; margin-top: 14px; }
+  .dialog-actions button {
+    flex: 1; padding: 11px; border: 2px solid;
+    border-radius: 10px; font-size: 14px; font-weight: 700;
+    cursor: pointer; font-family: inherit;
+  }
+  .dialog-actions .cancel { background: var(--card); color: var(--text-soft); border-color: var(--border-soft); }
+  .dialog-actions .confirm { background: var(--accent); color: white; border-color: var(--accent-dark); }
+  
+  .hidden { display: none !important; }
+  
+  /* AVATARS */
+  .av-1 { background: #DC2626; }
+  .av-2 { background: #F87171; }
+  .av-3 { background: #B91C1C; }
+  .av-4 { background: #EF4444; }
+  .av-5 { background: #991B1B; }
+  .av-6 { background: #FCA5A5; color: #7F1D1D; }
+  .av-7 { background: #7F1D1D; }
+  .av-8 { background: #DC2626; }
+  .av-bot { background: linear-gradient(135deg, #1F1F1F, #4A4A4A); border-color: var(--accent); }
+</style>
+
+<div id="app">
+  <!-- AUTH -->
+  <div id="authScreen" class="auth-screen">
+    <div class="logo"></div>
+    <div class="brand">Dot</div>
+    <div class="tagline">Connect one point at a time.</div>
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-mode="login">Log in</button>
+        <button class="auth-tab" data-mode="signup">Sign up</button>
+      </div>
+      <div id="authError" class="alert"></div>
+      <div class="field">
+        <label>Username</label>
+        <input id="authUser" type="text" placeholder="your_username" autocomplete="off" autocapitalize="off" />
+      </div>
+      <div id="displayNameField" class="field hidden">
+        <label>Display Name</label>
+        <input id="authDisplayName" type="text" placeholder="What people see" maxlength="30" />
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input id="authPass" type="password" placeholder="••••••••" />
+      </div>
+      <button id="authBtn" class="btn-primary full">Log in</button>
+    </div>
+  </div>
+  
+  <!-- MAIN -->
+  <div id="mainApp" class="hidden" style="flex:1; display:flex; flex-direction:column; overflow:hidden;">
+    <div id="chatsTab" class="list-screen">
+      <div class="header">
+        <div class="header-title">Chats</div>
+        <button class="header-btn" id="addFriendBtn" title="Add friend">+</button>
+      </div>
+      <div class="scroll-list" id="friendsList"></div>
+    </div>
+    
+    <div id="inboxTab" class="list-screen hidden">
+      <div class="header"><div class="header-title">Inbox</div></div>
+      <div class="scroll-list" id="inboxList"></div>
+    </div>
+    
+    <div id="profileTab" class="profile-screen hidden">
+      <div class="profile-header">
+        <div class="avatar profile-avatar" id="profileAvatar">?</div>
+        <div class="profile-name-row">
+          <div class="profile-name" id="profileName">—</div>
+          <button class="edit-icon" id="editNameBtn" title="Edit display name">✎</button>
+        </div>
+        <div class="profile-handle" id="profileHandle">@—</div>
+        <div class="profile-bio" id="profileHeaderBio"></div>
+      </div>
+      <div class="profile-section">
+        <div class="profile-row tappable" id="editBioRow">
+          <span class="label">Bio</span>
+          <span class="value bio-value" id="profileBio">Tap to add bio</span>
+        </div>
+        <div class="profile-row"><span class="label">Display name</span><span class="value" id="profileDisplayName">—</span></div>
+        <div class="profile-row"><span class="label">Username</span><span class="value" id="profileUsername">—</span></div>
+        <div class="profile-row"><span class="label">Joined</span><span class="value" id="profileJoined">—</span></div>
+        <div class="profile-row"><span class="label">Friends</span><span class="value" id="profileFriendCount">0</span></div>
+      </div>
+      <div class="profile-section">
+        <div class="profile-row">
+          <span class="label">Dark mode</span>
+          <div class="toggle on" id="themeToggle"></div>
+        </div>
+      </div>
+      <button class="logout-btn" id="logoutBtn">Log out</button>
+    </div>
+    
+    <div class="tab-bar">
+      <button class="tab active" data-tab="chats"><span class="icon">💬</span><span>Chats</span></button>
+      <button class="tab" data-tab="inbox">
+        <span class="icon">📥</span><span>Inbox</span>
+        <span class="tab-badge hidden" id="inboxBadge">0</span>
+      </button>
+      <button class="tab" data-tab="profile"><span class="icon">👤</span><span>Me</span></button>
+    </div>
+  </div>
+  
+  <div id="chatScreen" class="chat-screen">
+    <div class="chat-header">
+      <button class="back-btn" id="backBtn">‹</button>
+      <div class="avatar chat-avatar" id="chatAvatar">?</div>
+      <div class="chat-name-block">
+        <div class="chat-name" id="chatName">—</div>
+        <div class="chat-handle" id="chatHandle">@—</div>
+      </div>
+    </div>
+    <div class="messages" id="messages"></div>
+    <div class="composer">
+      <textarea id="msgInput" placeholder="Aa" rows="1"></textarea>
+      <button id="sendBtn" class="send-btn" disabled>➤</button>
+    </div>
+  </div>
+  
+  <div id="backdrop" class="backdrop"></div>
+  <div id="addFriendSheet" class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <div class="sheet-title">Add Friend</div>
+      <button class="sheet-close" id="closeSheetBtn">✕</button>
+    </div>
+    <div class="sheet-body">
+      <input id="searchInput" class="search-input" type="text" placeholder="Search by username or name..." autocomplete="off" autocapitalize="off" />
+      <div id="searchAlert"></div>
+      <div id="suggestionsContainer"></div>
+    </div>
+  </div>
+  
+  <div id="editDialog" class="dialog">
+    <div class="dialog-title">Edit display name</div>
+    <div class="dialog-text">This is the name others see. Your username won't change.</div>
+    <input id="editNameInput" class="dialog-input" type="text" maxlength="30" />
+    <div class="dialog-actions">
+      <button class="cancel" id="cancelEditBtn">Cancel</button>
+      <button class="confirm" id="saveEditBtn">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const State = {
+  currentUser: null,
+  activeChat: null,
+  friends: [],
+  chatPreviews: {},
+  inbox: [],
+  userCache: {},
+  messages: {},     // chatKey -> array of msgs (in-memory cache, source of truth)
+  pollTimer: null,
+  botReplyTimer: null,
+  theme: 'dark',
+};
+
+const BOT_USERNAME = 'testbot';
+const BOT_DISPLAY = 'Test Bot';
+
+// Virtual bot — always exists even if storage fails
+const BOT_USER = {
+  username: BOT_USERNAME,
+  displayName: BOT_DISPLAY,
+  bio: '🤖 Always online · here to help you test the chat',
+  joined: Date.now(),
+  isBot: true,
+};
+
+// ---- Storage ----
+async function sGet(key, shared = true) {
+  try { const r = await window.storage.get(key, shared); return r ? r.value : null; }
+  catch { return null; }
+}
+async function sSet(key, value, shared = true) {
+  try { return await window.storage.set(key, value, shared); } catch { return null; }
+}
+async function sList(prefix, shared = true) {
+  try { const r = await window.storage.list(prefix, shared); return r ? r.keys : []; }
+  catch { return []; }
+}
+
+function chatKey(a, b) { return 'chat:' + [a, b].sort().join('|'); }
+
+// Merge two message arrays, deduping by (from, t, text). Sorts by time.
+// This prevents data loss when concurrent reads-then-writes race.
+function mergeMsgs(a, b) {
+  const seen = new Set();
+  const result = [];
+  for (const m of [...(a || []), ...(b || [])]) {
+    const id = (m.from || '') + '|' + (m.t || 0) + '|' + (m.text || '');
+    if (!seen.has(id)) {
+      seen.add(id);
+      result.push(m);
+    }
+  }
+  result.sort((x, y) => (x.t || 0) - (y.t || 0));
+  return result;
+}
+
+// Read messages from storage and merge with in-memory cache (cache wins for new local msgs)
+async function readAndMergeMessages(key) {
+  const raw = await sGet(key);
+  let storageMsgs = [];
+  if (raw) { try { storageMsgs = JSON.parse(raw); } catch {} }
+  const cached = State.messages[key] || [];
+  const merged = mergeMsgs(storageMsgs, cached);
+  State.messages[key] = merged;
+  return merged;
+}
+
+// Save messages to storage (after merging with whatever's there) — race-safe
+async function saveMergedMessages(key, newMsg) {
+  if (!State.messages[key]) State.messages[key] = [];
+  if (newMsg) State.messages[key].push(newMsg);
+  // Read-merge-write to handle concurrent updates
+  const raw = await sGet(key);
+  let storageMsgs = [];
+  if (raw) { try { storageMsgs = JSON.parse(raw); } catch {} }
+  const merged = mergeMsgs(storageMsgs, State.messages[key]);
+  if (merged.length > 500) merged.splice(0, merged.length - 500);
+  State.messages[key] = merged;
+  await sSet(key, JSON.stringify(merged));
+  return merged;
+}
+
+function hashPass(s) {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) { h = ((h << 5) - h) + s.charCodeAt(i); h |= 0; }
+  return 'h' + Math.abs(h).toString(36) + '_' + s.length;
+}
+
+async function getUser(username) {
+  if (State.userCache[username]) return State.userCache[username];
+  const raw = await sGet('user:' + username);
+  if (raw) {
+    try {
+      const u = JSON.parse(raw);
+      if (!u.displayName) u.displayName = u.username;
+      if (typeof u.bio !== 'string') u.bio = '';
+      State.userCache[username] = u;
+      return u;
+    } catch {}
+  }
+  // Bot fallback - even if storage failed, bot is always available
+  if (username === BOT_USERNAME) {
+    State.userCache[username] = BOT_USER;
+    return BOT_USER;
+  }
+  return null;
+}
+
+async function getFriends(username) {
+  const raw = await sGet('friends:' + username);
+  if (!raw) return [];
+  try { return JSON.parse(raw); } catch { return []; }
+}
+
+async function getInbox(username) {
+  const raw = await sGet('inbox:' + username);
+  if (!raw) return [];
+  try { return JSON.parse(raw); } catch { return []; }
+}
+
+async function getAllUsernames() {
+  const keys = await sList('user:');
+  let usernames = keys.map(k => k.replace('user:', ''));
+  // Always make sure bot is in the list
+  if (!usernames.includes(BOT_USERNAME)) usernames.push(BOT_USERNAME);
+  return usernames;
+}
+
+// ---- Theme ----
+async function loadTheme() {
+  const t = await sGet('app_theme', false);
+  // Default to dark
+  State.theme = (t === 'light') ? 'light' : 'dark';
+  applyTheme();
+}
+function applyTheme() {
+  if (State.theme === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+  const toggle = document.getElementById('themeToggle');
+  if (toggle) toggle.classList.toggle('on', State.theme === 'dark');
+}
+async function toggleTheme() {
+  State.theme = State.theme === 'dark' ? 'light' : 'dark';
+  applyTheme();
+  await sSet('app_theme', State.theme, false);
+}
+
+// ---- Bot ----
+async function ensureBotExists() {
+  const existing = await sGet('user:' + BOT_USERNAME);
+  if (existing) return;
+  const botData = {
+    username: BOT_USERNAME,
+    displayName: BOT_DISPLAY,
+    bio: '🤖 Always online · here to help you test the chat',
+    passHash: hashPass('___bot_no_login___' + Math.random()),
+    joined: Date.now(),
+    isBot: true,
+  };
+  await sSet('user:' + BOT_USERNAME, JSON.stringify(botData));
+  await sSet('friends:' + BOT_USERNAME, JSON.stringify([]));
+  await sSet('inbox:' + BOT_USERNAME, JSON.stringify([]));
+}
+
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function botResponse(message) {
+  const lower = message.toLowerCase().trim();
+  if (/^(hi|hello|hey|yo|sup|hola|howdy)\b/.test(lower))
+    return pick(["Hey there! 👋","Hi! Nice to meet you.","Hello! How's it going?","Hey! 😊"]);
+  if (/how (are|r) (you|u|ya)/.test(lower))
+    return "Doing great — just chilling in browser storage 🤖 How about you?";
+  if (lower.includes('test'))
+    return "✅ Chat system works! Try logging in as a different user in another tab to test real two-person chats.";
+  if (lower.includes('friend'))
+    return "Friend system: tap ➕ on Chats, see suggestions, tap Add. Real users get a request in their Inbox. I auto-accept!";
+  if (lower.includes('inbox'))
+    return "The Inbox shows incoming friend requests. The red badge counts pending. Accept or decline each one.";
+  if (lower.includes('name'))
+    return "Change your display name from the Me tab — tap ✎ next to your name. Your username is permanent though!";
+  if (lower.includes('theme') || lower.includes('dark') || lower.includes('light'))
+    return "Toggle dark mode from the Me tab! Light mode = cream-red, dark mode = grey. Both have red outlines.";
+  if (lower.includes('bot'))
+    return "Yep, I'm a bot 🤖 I exist so you can test chat features without making a second account.";
+  if (/^(bye|cya|goodbye|gn|night)/.test(lower))
+    return "See you later! 👋";
+  if (/(thank|thanks|ty)/.test(lower))
+    return "You're welcome! 😊";
+  if (lower.includes('?'))
+    return pick([
+      "Good question! Try asking about 'friends', 'inbox', 'theme', or 'name'.",
+      "Hmm — I respond to keywords like 'test', 'friend', 'inbox', 'theme', 'name', 'bot'.",
+      "I'm not that smart, but I'm great for testing!",
+    ]);
+  return pick([
+    "Got your message! ✓",
+    `You said: "${message.slice(0,60)}${message.length>60?'…':''}" — stored.`,
+    "Cool, I'm reading 👀",
+    "Thanks for the message!",
+    "Beep boop 🤖 — received!",
+    "Try asking me about 'friends', 'inbox', or 'theme'!",
+  ]);
+}
+
+async function triggerBotReply(userMessage) {
+  if (State.botReplyTimer) clearTimeout(State.botReplyTimer);
+  showTyping(true);
+  const delay = 700 + Math.random() * 800;
+  State.botReplyTimer = setTimeout(async () => {
+    showTyping(false);
+    const reply = botResponse(userMessage);
+    const key = chatKey(State.currentUser.username, BOT_USERNAME);
+    const newMsg = { from: BOT_USERNAME, text: reply, t: Date.now() };
+    
+    // Add to cache and save with merge (race-safe)
+    await saveMergedMessages(key, newMsg);
+    
+    if (State.activeChat && State.activeChat.username === BOT_USERNAME) {
+      renderMessages(State.messages[key], true);
+    }
+  }, delay);
+}
+
+function showTyping(show) {
+  const container = document.getElementById('messages');
+  let typing = document.getElementById('typingRow');
+  if (show) {
+    if (!typing && State.activeChat && State.activeChat.username === BOT_USERNAME) {
+      const div = document.createElement('div');
+      div.id = 'typingRow';
+      div.className = 'msg-row theirs';
+      div.innerHTML = `<div class="avatar msg-avatar av-bot">🤖</div><div class="bubble-wrap"><div class="typing-indicator"><span></span><span></span><span></span></div></div>`;
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+    }
+  } else {
+    if (typing) typing.remove();
+  }
+}
+
+// ---- Auth ----
+let authMode = 'login';
+
+document.querySelectorAll('.auth-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    authMode = tab.dataset.mode;
+    document.getElementById('authBtn').textContent = authMode === 'login' ? 'Log in' : 'Create account';
+    document.getElementById('displayNameField').classList.toggle('hidden', authMode !== 'signup');
+    hideError();
+  });
+});
+
+function showError(msg) {
+  const el = document.getElementById('authError');
+  el.textContent = msg;
+  el.classList.add('show');
+}
+function hideError() { document.getElementById('authError').classList.remove('show'); }
+
+document.getElementById('authBtn').addEventListener('click', handleAuth);
+['authUser','authDisplayName','authPass'].forEach(id => {
+  document.getElementById(id).addEventListener('keydown', e => { if (e.key === 'Enter') handleAuth(); });
+});
+
+async function handleAuth() {
+  hideError();
+  const username = document.getElementById('authUser').value.trim().toLowerCase();
+  const password = document.getElementById('authPass').value;
+  const displayName = document.getElementById('authDisplayName').value.trim();
+  
+  if (!username || !password) return showError('Please enter a username and password.');
+  if (!/^[a-z0-9_]{3,20}$/.test(username)) return showError('Username: 3–20 lowercase letters, numbers, or underscores.');
+  if (username === BOT_USERNAME) return showError('That username is reserved.');
+  if (password.length < 4) return showError('Password must be at least 4 characters.');
+  
+  const btn = document.getElementById('authBtn');
+  btn.disabled = true;
+  btn.textContent = '...';
+  
+  try {
+    const userKey = 'user:' + username;
+    const existing = await sGet(userKey);
+    
+    if (authMode === 'signup') {
+      if (existing) return showError('That username is already taken. Choose another.');
+      const userData = {
+        username,
+        displayName: displayName || username,
+        bio: '',
+        passHash: hashPass(password),
+        joined: Date.now(),
+      };
+      await sSet(userKey, JSON.stringify(userData));
+      await sSet('friends:' + username, JSON.stringify([]));
+      await sSet('inbox:' + username, JSON.stringify([]));
+      State.currentUser = userData;
+    } else {
+      if (!existing) return showError('No account found with that username.');
+      const userData = JSON.parse(existing);
+      if (userData.passHash !== hashPass(password)) return showError('Incorrect password.');
+      if (!userData.displayName) userData.displayName = userData.username;
+      if (typeof userData.bio !== 'string') userData.bio = '';
+      State.currentUser = userData;
+    }
+    await enterApp();
+  } catch (err) {
+    console.error(err);
+    showError('Something went wrong. Try again.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = authMode === 'login' ? 'Log in' : 'Create account';
+  }
+}
+
+async function enterApp() {
+  document.getElementById('authScreen').classList.add('hidden');
+  document.getElementById('mainApp').classList.remove('hidden');
+  await ensureBotExists();
+  await refreshAll();
+  renderProfile();
+  if (State.pollTimer) clearInterval(State.pollTimer);
+  State.pollTimer = setInterval(async () => {
+    if (State.activeChat) await loadMessages(State.activeChat.username, false);
+    else await refreshAll();
+  }, 2500);
+}
+
+async function refreshAll() {
+  if (!State.currentUser) return;
+  State.userCache = {};
+  
+  // Read friends from storage
+  const storageFriends = await getFriends(State.currentUser.username);
+  
+  // Check if user has the bot-added flag (personal storage, more reliable)
+  const botAdded = await sGet('botAdded:' + State.currentUser.username, false);
+  
+  // Merge: take storage list, but ALWAYS include bot if user has added it
+  const friendSet = new Set(storageFriends);
+  if (botAdded === '1') friendSet.add(BOT_USERNAME);
+  // Also keep any locally-tracked friends (in case storage write hasn't propagated)
+  for (const f of State.friends) friendSet.add(f);
+  State.friends = Array.from(friendSet);
+  
+  State.inbox = await getInbox(State.currentUser.username);
+  
+  // Rebuild chat previews from storage
+  const newPreviews = {};
+  for (const f of State.friends) {
+    const raw = await sGet(chatKey(State.currentUser.username, f));
+    if (raw) {
+      try {
+        const msgs = JSON.parse(raw);
+        if (msgs.length) {
+          const last = msgs[msgs.length - 1];
+          newPreviews[f] = {
+            lastMsg: last.text,
+            lastTime: last.t,
+            fromMe: last.from === State.currentUser.username,
+          };
+        }
+      } catch {}
+    }
+  }
+  // Merge previews (use new from storage, keep old if storage has nothing yet)
+  State.chatPreviews = { ...State.chatPreviews, ...newPreviews };
+  
+  await renderFriends();
+  await renderInbox();
+  updateInboxBadge();
+  document.getElementById('profileFriendCount').textContent = State.friends.length;
+}
+
+// ---- Avatars ----
+function avatarClass(user) {
+  if (user.isBot) return 'av-bot';
+  let h = 0;
+  const name = user.username || user;
+  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) | 0;
+  return 'av-' + (Math.abs(h) % 8 + 1);
+}
+function avatarLetter(user) {
+  if (user.isBot) return '🤖';
+  const name = (user.displayName || user.username || user || '?');
+  return (name[0] || '?').toUpperCase();
+}
+
+// ---- Friends list ----
+async function renderFriends() {
+  const list = document.getElementById('friendsList');
+  if (State.friends.length === 0) {
+    list.innerHTML = `<div class="empty-state">
+      <div class="emoji">👥</div>
+      <div class="empty-state-title">No friends yet</div>
+      <div class="empty-state-text">
+        Tap the <strong style="color:var(--accent);">+</strong> in the top right to find people to add.
+      </div>
+    </div>`;
+    return;
+  }
+  
+  const sorted = [...State.friends].sort((a, b) => {
+    const pa = State.chatPreviews[a], pb = State.chatPreviews[b];
+    if (pa && pb) return pb.lastTime - pa.lastTime;
+    if (pa) return -1;
+    if (pb) return 1;
+    return a.localeCompare(b);
+  });
+  
+  const withMsgs = sorted.filter(f => State.chatPreviews[f]);
+  const noMsgs = sorted.filter(f => !State.chatPreviews[f]);
+  
+  let html = '';
+  if (withMsgs.length) {
+    html += '<div class="section-label">Recent</div>';
+    for (const f of withMsgs) html += await friendItemHTML(f);
+  }
+  if (noMsgs.length) {
+    html += '<div class="section-label">Friends</div>';
+    for (const f of noMsgs) html += await friendItemHTML(f);
+  }
+  
+  list.innerHTML = html;
+  list.querySelectorAll('.row').forEach(el => {
+    el.addEventListener('click', () => openChat(el.dataset.user));
+  });
+}
+
+async function friendItemHTML(username) {
+  const user = await getUser(username);
+  if (!user) return '';
+  const preview = State.chatPreviews[username];
+  let previewText = 'Tap to start chatting';
+  let timeText = '';
+  if (preview) {
+    const prefix = preview.fromMe ? 'You: ' : '';
+    previewText = prefix + preview.lastMsg;
+    if (previewText.length > 40) previewText = previewText.slice(0, 40) + '…';
+    timeText = formatPreviewTime(preview.lastTime);
+  }
+  const botBadge = user.isBot ? '<span class="bot-tag">BOT</span>' : '';
+  return `<div class="row" data-user="${escapeHtml(username)}">
+    <div class="avatar ${avatarClass(user)}">${avatarLetter(user)}</div>
+    <div class="row-info">
+      <div class="row-name">${escapeHtml(user.displayName)}${botBadge}</div>
+      <div class="row-sub">${escapeHtml(previewText)}</div>
+    </div>
+    <div class="row-meta"><div class="row-time">${timeText}</div></div>
+  </div>`;
+}
+
+// ---- Inbox ----
+async function renderInbox() {
+  const list = document.getElementById('inboxList');
+  if (State.inbox.length === 0) {
+    list.innerHTML = `<div class="empty-state">
+      <div class="emoji">📭</div>
+      <div class="empty-state-title">Inbox is empty</div>
+      <div class="empty-state-text">Friend requests from other users will show up here.</div>
+    </div>`;
+    return;
+  }
+  
+  let html = '<div class="section-label">Friend Requests</div>';
+  for (const req of State.inbox) {
+    const user = await getUser(req.from);
+    if (!user) continue;
+    const botBadge = user.isBot ? '<span class="bot-tag">BOT</span>' : '';
+    html += `<div class="row no-click">
+      <div class="avatar ${avatarClass(user)}">${avatarLetter(user)}</div>
+      <div class="row-info">
+        <div class="row-name">${escapeHtml(user.displayName)}${botBadge}</div>
+        <div class="row-sub">@${escapeHtml(user.username)} · ${formatPreviewTime(req.t)}</div>
+      </div>
+      <div class="btn-group">
+        <button class="pill-btn primary" data-action="accept" data-from="${escapeHtml(req.from)}">Accept</button>
+        <button class="pill-btn danger" data-action="decline" data-from="${escapeHtml(req.from)}">Decline</button>
+      </div>
+    </div>`;
+  }
+  list.innerHTML = html;
+  list.querySelectorAll('button[data-action]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const action = btn.dataset.action;
+      const from = btn.dataset.from;
+      if (action === 'accept') acceptRequest(from);
+      else declineRequest(from);
+    });
+  });
+}
+
+function updateInboxBadge() {
+  const badge = document.getElementById('inboxBadge');
+  if (State.inbox.length > 0) {
+    badge.textContent = State.inbox.length;
+    badge.classList.remove('hidden');
+  } else {
+    badge.classList.add('hidden');
+  }
+}
+
+async function acceptRequest(fromUsername) {
+  const me = State.currentUser.username;
+  let myFriends = await getFriends(me);
+  if (!myFriends.includes(fromUsername)) myFriends.push(fromUsername);
+  await sSet('friends:' + me, JSON.stringify(myFriends));
+  let theirFriends = await getFriends(fromUsername);
+  if (!theirFriends.includes(me)) theirFriends.push(me);
+  await sSet('friends:' + fromUsername, JSON.stringify(theirFriends));
+  let inbox = await getInbox(me);
+  inbox = inbox.filter(r => r.from !== fromUsername);
+  await sSet('inbox:' + me, JSON.stringify(inbox));
+  await refreshAll();
+}
+
+async function declineRequest(fromUsername) {
+  const me = State.currentUser.username;
+  let inbox = await getInbox(me);
+  inbox = inbox.filter(r => r.from !== fromUsername);
+  await sSet('inbox:' + me, JSON.stringify(inbox));
+  await refreshAll();
+}
+
+// ---- Add friend sheet ----
+const sheet = document.getElementById('addFriendSheet');
+const backdrop = document.getElementById('backdrop');
+const editDialog = document.getElementById('editDialog');
+
+document.getElementById('addFriendBtn').addEventListener('click', openAddFriendSheet);
+document.getElementById('closeSheetBtn').addEventListener('click', closeAddFriendSheet);
+backdrop.addEventListener('click', () => { closeAddFriendSheet(); closeEditDialog(); });
+
+async function openAddFriendSheet() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchAlert').innerHTML = '';
+  sheet.classList.add('open');
+  backdrop.classList.add('open');
+  await renderSuggestions('');
+}
+function closeAddFriendSheet() {
+  sheet.classList.remove('open');
+  if (!editDialog.classList.contains('open')) backdrop.classList.remove('open');
+}
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  document.getElementById('searchAlert').innerHTML = '';
+  renderSuggestions(e.target.value.trim().toLowerCase());
+});
+
+async function renderSuggestions(query) {
+  const container = document.getElementById('suggestionsContainer');
+  const me = State.currentUser.username;
+  
+  const allUsernames = await getAllUsernames();
+  const myFriends = await getFriends(me);
+  const myInbox = await getInbox(me);
+  
+  let candidates = allUsernames.filter(u => u !== me);
+  
+  if (query) {
+    candidates = await asyncFilter(candidates, async u => {
+      const user = await getUser(u);
+      if (!user) return false;
+      return u.includes(query) || (user.displayName || '').toLowerCase().includes(query);
+    });
+  }
+  
+  if (candidates.length === 0) {
+    container.innerHTML = `<div class="empty-state" style="padding:30px 20px;">
+      <div class="emoji">🔍</div>
+      <div class="empty-state-title">No matches</div>
+      <div class="empty-state-text">Try a different search.</div>
+    </div>`;
+    return;
+  }
+  
+  let html = `<div style="font-size:12px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.8px; margin-bottom:8px;">${query ? 'Results' : 'People you can add'}</div>`;
+  html += '<div class="suggestions-list">';
+  
+  // Bot first, then alphabetical
+  candidates.sort((a, b) => {
+    if (a === BOT_USERNAME) return -1;
+    if (b === BOT_USERNAME) return 1;
+    return a.localeCompare(b);
+  });
+  
+  for (const username of candidates) {
+    const user = await getUser(username);
+    if (!user) continue;
+    
+    const isFriend = myFriends.includes(username);
+    const theySentMe = myInbox.find(r => r.from === username);
+    const theirInbox = await getInbox(username);
+    const iSentThem = theirInbox.find(r => r.from === me);
+    
+    let actionHTML = '';
+    if (isFriend) actionHTML = `<button class="pill-btn muted">✓ Friends</button>`;
+    else if (theySentMe) actionHTML = `<button class="pill-btn primary" data-act="accept" data-user="${escapeHtml(username)}">Accept</button>`;
+    else if (iSentThem) actionHTML = `<button class="pill-btn muted">Pending</button>`;
+    else actionHTML = `<button class="pill-btn primary" data-act="add" data-user="${escapeHtml(username)}">Add</button>`;
+    
+    const botBadge = user.isBot ? '<span class="bot-tag">BOT</span>' : '';
+    const rowClass = user.isBot ? 'suggestion-row bot-row' : 'suggestion-row';
+    html += `<div class="${rowClass}">
+      <div class="avatar ${avatarClass(user)}">${avatarLetter(user)}</div>
+      <div class="row-info">
+        <div class="row-name">${escapeHtml(user.displayName)}${botBadge}</div>
+        <div class="row-sub">@${escapeHtml(user.username)}</div>
+      </div>
+      ${actionHTML}
+    </div>`;
+  }
+  html += '</div>';
+  
+  container.innerHTML = html;
+  container.querySelectorAll('button[data-act]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const act = btn.dataset.act;
+      const username = btn.dataset.user;
+      if (act === 'add') await sendFriendRequest(username);
+      else if (act === 'accept') {
+        await acceptRequest(username);
+        const queryNow = document.getElementById('searchInput').value.trim().toLowerCase();
+        await renderSuggestions(queryNow);
+      }
+    });
+  });
+}
+
+async function asyncFilter(arr, predicate) {
+  const results = await Promise.all(arr.map(predicate));
+  return arr.filter((_, i) => results[i]);
+}
+
+async function sendFriendRequest(targetUsername) {
+  const me = State.currentUser.username;
+  
+  // Make sure bot exists in storage if we're targeting it
+  if (targetUsername === BOT_USERNAME) {
+    await ensureBotExists();
+  }
+  
+  const target = await getUser(targetUsername);
+  if (!target) return;
+  
+  // Bot auto-accepts
+  if (target.isBot) {
+    // Set a personal flag — this is the source of truth that user has added the bot
+    await sSet('botAdded:' + me, '1', false);
+    
+    // Save to storage (bidirectional friendship)
+    let myFriends = await getFriends(me);
+    if (!myFriends.includes(targetUsername)) myFriends.push(targetUsername);
+    await sSet('friends:' + me, JSON.stringify(myFriends));
+    let botFriends = await getFriends(targetUsername);
+    if (!botFriends.includes(me)) botFriends.push(me);
+    await sSet('friends:' + targetUsername, JSON.stringify(botFriends));
+    
+    // Welcome message (only if no chat exists yet)
+    const key = chatKey(me, targetUsername);
+    const existingChat = await sGet(key);
+    let welcomeMsg = null;
+    if (!existingChat) {
+      welcomeMsg = {
+        from: targetUsername,
+        text: `Hey ${State.currentUser.displayName}! 👋 I'm Test Bot — your buddy for testing the chat system. Send me anything and I'll reply. Try asking me about 'friends', 'inbox', 'theme', or 'name'!`,
+        t: Date.now(),
+      };
+      // Use saveMergedMessages so it's race-safe
+      await saveMergedMessages(key, welcomeMsg);
+    } else {
+      // Pre-load existing messages into cache
+      try { State.messages[key] = JSON.parse(existingChat); } catch { State.messages[key] = []; }
+    }
+    
+    // Update local state DIRECTLY so bot shows up instantly
+    if (!State.friends.includes(targetUsername)) {
+      State.friends.push(targetUsername);
+    }
+    if (welcomeMsg) {
+      State.chatPreviews[targetUsername] = {
+        lastMsg: welcomeMsg.text,
+        lastTime: welcomeMsg.t,
+        fromMe: false,
+      };
+    }
+    State.userCache[targetUsername] = target;
+    
+    // Close the sheet
+    sheet.classList.remove('open');
+    backdrop.classList.remove('open');
+    
+    // Force show chats tab (without triggering refresh that could wipe state)
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === 'chats'));
+    document.getElementById('chatsTab').classList.remove('hidden');
+    document.getElementById('inboxTab').classList.add('hidden');
+    document.getElementById('profileTab').classList.add('hidden');
+    
+    // Re-render friends list with bot now in it
+    await renderFriends();
+    document.getElementById('profileFriendCount').textContent = State.friends.length;
+    
+    // After sheet slides down, open the chat
+    setTimeout(() => openChat(targetUsername), 320);
+    return;
+  }
+  
+  let theirInbox = await getInbox(targetUsername);
+  if (theirInbox.find(r => r.from === me)) {
+    document.getElementById('searchAlert').innerHTML = `<div class="alert show">Request already sent.</div>`;
+    return;
+  }
+  theirInbox.push({ from: me, t: Date.now() });
+  await sSet('inbox:' + targetUsername, JSON.stringify(theirInbox));
+  document.getElementById('searchAlert').innerHTML = `<div class="alert show">✓ Friend request sent to @${escapeHtml(targetUsername)}!</div>`;
+  
+  const queryNow = document.getElementById('searchInput').value.trim().toLowerCase();
+  await renderSuggestions(queryNow);
+}
+
+// ---- Chat ----
+async function openChat(username) {
+  const user = await getUser(username);
+  if (!user) return;
+  State.activeChat = { username, displayName: user.displayName };
+  document.getElementById('chatName').innerHTML = escapeHtml(user.displayName) + 
+    (user.isBot ? ' <span class="bot-tag">BOT</span>' : '');
+  document.getElementById('chatHandle').textContent = '@' + user.username;
+  const av = document.getElementById('chatAvatar');
+  av.className = 'avatar chat-avatar ' + avatarClass(user);
+  av.textContent = avatarLetter(user);
+  document.getElementById('chatScreen').classList.add('open');
+  await loadMessages(username, true);
+  document.getElementById('msgInput').focus();
+}
+
+function closeChat() {
+  document.getElementById('chatScreen').classList.remove('open');
+  State.activeChat = null;
+  if (State.botReplyTimer) { clearTimeout(State.botReplyTimer); State.botReplyTimer = null; }
+  refreshAll();
+}
+
+async function loadMessages(otherUser, scrollToBottom) {
+  const key = chatKey(State.currentUser.username, otherUser);
+  const merged = await readAndMergeMessages(key);
+  renderMessages(merged, scrollToBottom);
+}
+
+function renderMessages(msgs, forceScroll) {
+  const container = document.getElementById('messages');
+  const wasNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 80;
+  
+  if (msgs.length === 0) {
+    container.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text);">
+      <div style="font-size:42px; margin-bottom:10px;">👋</div>
+      <div style="font-size:14px; font-weight:600;">No messages yet — say hi!</div>
+    </div>`;
+    return;
+  }
+  
+  let html = '';
+  let lastDay = '';
+  const otherUserData = State.userCache[State.activeChat.username];
+  
+  msgs.forEach(m => {
+    const day = formatDay(m.t);
+    if (day !== lastDay) {
+      html += `<div class="day-divider"><span>${day}</span></div>`;
+      lastDay = day;
+    }
+    const mine = m.from === State.currentUser.username;
+    const time = formatTime(m.t);
+    const senderUser = mine ? State.currentUser : (otherUserData || { username: m.from });
+    const av = mine ? '' :
+      `<div class="avatar msg-avatar ${avatarClass(senderUser)}">${avatarLetter(senderUser)}</div>`;
+    html += `<div class="msg-row ${mine ? 'mine' : 'theirs'}">
+      ${mine ? `<div class="msg-time">${time}</div>` : av}
+      <div class="bubble-wrap"><div class="bubble">${escapeHtml(m.text)}</div></div>
+      ${mine ? '' : `<div class="msg-time">${time}</div>`}
+    </div>`;
+  });
+  
+  container.innerHTML = html;
+  if (forceScroll || wasNearBottom) container.scrollTop = container.scrollHeight;
+}
+
+async function sendMessage() {
+  const input = document.getElementById('msgInput');
+  const text = input.value.trim();
+  if (!text || !State.activeChat) return;
+  input.value = '';
+  autosizeInput();
+  document.getElementById('sendBtn').disabled = true;
+  
+  const otherUser = State.activeChat.username;
+  const key = chatKey(State.currentUser.username, otherUser);
+  
+  // Add to local cache and render IMMEDIATELY (no waiting for storage)
+  const newMsg = { from: State.currentUser.username, text, t: Date.now() };
+  if (!State.messages[key]) State.messages[key] = [];
+  State.messages[key].push(newMsg);
+  renderMessages(State.messages[key], true);
+  
+  // Save with merge (handles race with bot reply or other writes)
+  await saveMergedMessages(key);
+  
+  const otherUserData = await getUser(otherUser);
+  if (otherUserData && otherUserData.isBot) triggerBotReply(text);
+}
+
+document.getElementById('backBtn').addEventListener('click', closeChat);
+document.getElementById('sendBtn').addEventListener('click', sendMessage);
+
+const msgInput = document.getElementById('msgInput');
+msgInput.addEventListener('input', () => {
+  document.getElementById('sendBtn').disabled = msgInput.value.trim().length === 0;
+  autosizeInput();
+});
+msgInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+function autosizeInput() {
+  msgInput.style.height = 'auto';
+  msgInput.style.height = Math.min(msgInput.scrollHeight, 100) + 'px';
+}
+
+// ---- Tabs ----
+function switchTab(which) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === which));
+  document.getElementById('chatsTab').classList.toggle('hidden', which !== 'chats');
+  document.getElementById('inboxTab').classList.toggle('hidden', which !== 'inbox');
+  document.getElementById('profileTab').classList.toggle('hidden', which !== 'profile');
+  if (which === 'chats' || which === 'inbox') refreshAll();
+  if (which === 'profile') renderProfile();
+}
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => switchTab(t.dataset.tab));
+});
+
+// ---- Profile ----
+function renderProfile() {
+  const u = State.currentUser;
+  document.getElementById('profileName').textContent = u.displayName;
+  document.getElementById('profileHandle').textContent = '@' + u.username;
+  document.getElementById('profileDisplayName').textContent = u.displayName;
+  document.getElementById('profileUsername').textContent = '@' + u.username;
+  document.getElementById('profileJoined').textContent = new Date(u.joined)
+    .toLocaleDateString(undefined, { year:'numeric', month:'short', day:'numeric' });
+  document.getElementById('profileFriendCount').textContent = State.friends.length;
+  const av = document.getElementById('profileAvatar');
+  av.className = 'avatar profile-avatar ' + avatarClass(u);
+  av.textContent = avatarLetter(u);
+  document.getElementById('themeToggle').classList.toggle('on', State.theme === 'dark');
+}
+
+document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+document.getElementById('editNameBtn').addEventListener('click', () => {
+  document.getElementById('editNameInput').value = State.currentUser.displayName;
+  editDialog.classList.add('open');
+  backdrop.classList.add('open');
+  setTimeout(() => document.getElementById('editNameInput').focus(), 100);
+});
+
+function closeEditDialog() {
+  editDialog.classList.remove('open');
+  if (!sheet.classList.contains('open')) backdrop.classList.remove('open');
+}
+
+document.getElementById('cancelEditBtn').addEventListener('click', closeEditDialog);
+document.getElementById('editNameInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('saveEditBtn').click();
+  if (e.key === 'Escape') closeEditDialog();
+});
+
+document.getElementById('saveEditBtn').addEventListener('click', async () => {
+  const newName = document.getElementById('editNameInput').value.trim();
+  if (!newName || newName.length > 30) return;
+  State.currentUser.displayName = newName;
+  await sSet('user:' + State.currentUser.username, JSON.stringify(State.currentUser));
+  State.userCache[State.currentUser.username] = State.currentUser;
+  renderProfile();
+  await refreshAll();
+  closeEditDialog();
+});
+
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  if (State.pollTimer) clearInterval(State.pollTimer);
+  if (State.botReplyTimer) clearTimeout(State.botReplyTimer);
+  State.currentUser = null;
+  State.activeChat = null;
+  State.friends = [];
+  State.inbox = [];
+  State.chatPreviews = {};
+  State.userCache = {};
+  document.getElementById('chatScreen').classList.remove('open');
+  document.getElementById('authScreen').classList.remove('hidden');
+  document.getElementById('mainApp').classList.add('hidden');
+  document.getElementById('authUser').value = '';
+  document.getElementById('authPass').value = '';
+  document.getElementById('authDisplayName').value = '';
+  switchTab('chats');
+});
+
+// ---- Helpers ----
+function escapeHtml(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+function formatTime(t) {
+  const d = new Date(t);
+  const h = d.getHours(), m = d.getMinutes();
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  return ((h + 11) % 12 + 1) + ':' + String(m).padStart(2, '0') + ' ' + ampm;
+}
+function formatDay(t) {
+  const d = new Date(t), today = new Date();
+  const yesterday = new Date(); yesterday.setDate(today.getDate() - 1);
+  const sameDay = (a, b) => a.toDateString() === b.toDateString();
+  if (sameDay(d, today)) return 'Today';
+  if (sameDay(d, yesterday)) return 'Yesterday';
+  return d.toLocaleDateString(undefined, { weekday:'short', month:'short', day:'numeric' });
+}
+function formatPreviewTime(t) {
+  const d = new Date(t), today = new Date();
+  if (d.toDateString() === today.toDateString()) return formatTime(t);
+  const days = Math.floor((today - d) / 86400000);
+  if (days < 7) return d.toLocaleDateString(undefined, { weekday:'short' });
+  return d.toLocaleDateString(undefined, { month:'short', day:'numeric' });
+}
+
+// ---- Init ----
+(async () => {
+  await loadTheme();
+  await ensureBotExists();
+})();
+</script>
