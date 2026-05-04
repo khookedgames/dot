@@ -387,6 +387,37 @@
   }
   .edit-icon:hover { background: rgba(255,255,255,0.4); }
   .profile-handle { font-size: 14px; opacity: 0.9; }
+  .profile-bio {
+    font-size: 13px;
+    color: rgba(255,255,255,0.95);
+    text-align: center;
+    max-width: 280px;
+    line-height: 1.4;
+    margin-top: 6px;
+    padding: 8px 14px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.3);
+    word-wrap: break-word;
+  }
+  .profile-bio.empty { display: none; }
+  .profile-row.tappable { cursor: pointer; transition: background 0.15s; }
+  .profile-row.tappable:hover { background: var(--hover); }
+  .bio-value {
+    max-width: 60%;
+    text-align: right;
+    white-space: normal;
+    word-wrap: break-word;
+    line-height: 1.3;
+  }
+  .bio-value.placeholder { color: var(--text-soft); font-weight: 400; font-style: italic; }
+  .friend-bio {
+    font-size: 12px;
+    color: var(--text-soft);
+    margin-top: 2px;
+    font-style: italic;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
   .profile-section {
     background: var(--card); margin-top: 12px;
     border-top: 2px solid var(--border);
@@ -667,6 +698,17 @@
     <div class="dialog-actions">
       <button class="cancel" id="cancelEditBtn">Cancel</button>
       <button class="confirm" id="saveEditBtn">Save</button>
+    </div>
+  </div>
+  
+  <div id="bioDialog" class="dialog">
+    <div class="dialog-title">Edit bio</div>
+    <div class="dialog-text">Tell others a little about you. Max 120 characters.</div>
+    <textarea id="bioInput" class="dialog-input" maxlength="120" rows="3" style="resize:none; min-height:70px; line-height:1.4;"></textarea>
+    <div style="font-size:11px; color:var(--text-soft); text-align:right; margin-top:4px;"><span id="bioCharCount">0</span>/120</div>
+    <div class="dialog-actions">
+      <button class="cancel" id="cancelBioBtn">Cancel</button>
+      <button class="confirm" id="saveBioBtn">Save</button>
     </div>
   </div>
 </div>
@@ -1208,7 +1250,11 @@ const editDialog = document.getElementById('editDialog');
 
 document.getElementById('addFriendBtn').addEventListener('click', openAddFriendSheet);
 document.getElementById('closeSheetBtn').addEventListener('click', closeAddFriendSheet);
-backdrop.addEventListener('click', () => { closeAddFriendSheet(); closeEditDialog(); });
+backdrop.addEventListener('click', () => { 
+  closeAddFriendSheet(); 
+  closeEditDialog(); 
+  if (typeof closeBioDialog === 'function') closeBioDialog();
+});
 
 async function openAddFriendSheet() {
   document.getElementById('searchInput').value = '';
@@ -1281,11 +1327,15 @@ async function renderSuggestions(query) {
     
     const botBadge = user.isBot ? '<span class="bot-tag">BOT</span>' : '';
     const rowClass = user.isBot ? 'suggestion-row bot-row' : 'suggestion-row';
+    const bioLine = (user.bio && user.bio.trim()) 
+      ? `<div class="friend-bio">${escapeHtml(user.bio.trim())}</div>` 
+      : '';
     html += `<div class="${rowClass}">
       <div class="avatar ${avatarClass(user)}">${avatarLetter(user)}</div>
       <div class="row-info">
         <div class="row-name">${escapeHtml(user.displayName)}${botBadge}</div>
         <div class="row-sub">@${escapeHtml(user.username)}</div>
+        ${bioLine}
       </div>
       ${actionHTML}
     </div>`;
@@ -1385,13 +1435,28 @@ async function sendFriendRequest(targetUsername) {
     return;
   }
   
-  let theirInbox = await getInbox(targetUsername);
-  if (theirInbox.find(r => r.from === me)) {
+  // Track sent requests in personal storage (race-safe, source of truth)
+  const sentRaw = await sGet('sentRequests:' + me, false);
+  let sent = [];
+  if (sentRaw) { try { sent = JSON.parse(sentRaw); } catch {} }
+  if (sent.includes(targetUsername)) {
     document.getElementById('searchAlert').innerHTML = `<div class="alert show">Request already sent.</div>`;
     return;
   }
-  theirInbox.push({ from: me, t: Date.now() });
-  await sSet('inbox:' + targetUsername, JSON.stringify(theirInbox));
+  
+  // Read-merge-write so we don't clobber other requests
+  const existingInboxRaw = await sGet('inbox:' + targetUsername);
+  let theirInbox = [];
+  if (existingInboxRaw) { try { theirInbox = JSON.parse(existingInboxRaw); } catch {} }
+  if (!theirInbox.find(r => r.from === me)) {
+    theirInbox.push({ from: me, t: Date.now() });
+    await sSet('inbox:' + targetUsername, JSON.stringify(theirInbox));
+  }
+  
+  // Add to sent-requests in personal storage
+  sent.push(targetUsername);
+  await sSet('sentRequests:' + me, JSON.stringify(sent), false);
+  
   document.getElementById('searchAlert').innerHTML = `<div class="alert show">✓ Friend request sent to @${escapeHtml(targetUsername)}!</div>`;
   
   const queryNow = document.getElementById('searchInput').value.trim().toLowerCase();
@@ -1528,6 +1593,28 @@ function renderProfile() {
   document.getElementById('profileJoined').textContent = new Date(u.joined)
     .toLocaleDateString(undefined, { year:'numeric', month:'short', day:'numeric' });
   document.getElementById('profileFriendCount').textContent = State.friends.length;
+  
+  // Bio in header (only if set)
+  const headerBio = document.getElementById('profileHeaderBio');
+  const bioText = (u.bio || '').trim();
+  if (bioText) {
+    headerBio.textContent = bioText;
+    headerBio.classList.remove('empty');
+  } else {
+    headerBio.textContent = '';
+    headerBio.classList.add('empty');
+  }
+  
+  // Bio row
+  const bioVal = document.getElementById('profileBio');
+  if (bioText) {
+    bioVal.textContent = bioText;
+    bioVal.classList.remove('placeholder');
+  } else {
+    bioVal.textContent = 'Tap to add bio';
+    bioVal.classList.add('placeholder');
+  }
+  
   const av = document.getElementById('profileAvatar');
   av.className = 'avatar profile-avatar ' + avatarClass(u);
   av.textContent = avatarLetter(u);
@@ -1563,6 +1650,43 @@ document.getElementById('saveEditBtn').addEventListener('click', async () => {
   renderProfile();
   await refreshAll();
   closeEditDialog();
+});
+
+// ---- Bio editing ----
+const bioDialog = document.getElementById('bioDialog');
+const bioInput = document.getElementById('bioInput');
+const bioCharCount = document.getElementById('bioCharCount');
+
+function openBioDialog() {
+  bioInput.value = State.currentUser.bio || '';
+  bioCharCount.textContent = bioInput.value.length;
+  bioDialog.classList.add('open');
+  backdrop.classList.add('open');
+  setTimeout(() => bioInput.focus(), 100);
+}
+function closeBioDialog() {
+  bioDialog.classList.remove('open');
+  if (!sheet.classList.contains('open') && !editDialog.classList.contains('open')) {
+    backdrop.classList.remove('open');
+  }
+}
+
+document.getElementById('editBioRow').addEventListener('click', openBioDialog);
+document.getElementById('cancelBioBtn').addEventListener('click', closeBioDialog);
+bioInput.addEventListener('input', () => {
+  bioCharCount.textContent = bioInput.value.length;
+});
+bioInput.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeBioDialog();
+});
+
+document.getElementById('saveBioBtn').addEventListener('click', async () => {
+  const newBio = bioInput.value.trim().slice(0, 120);
+  State.currentUser.bio = newBio;
+  await sSet('user:' + State.currentUser.username, JSON.stringify(State.currentUser));
+  State.userCache[State.currentUser.username] = State.currentUser;
+  renderProfile();
+  closeBioDialog();
 });
 
 document.getElementById('logoutBtn').addEventListener('click', () => {
