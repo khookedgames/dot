@@ -786,18 +786,32 @@ const VIRTUAL_MAP = Object.fromEntries(VIRTUAL_USERS.map(u => [u.username, u]));
 function isVirtual(u) { return !!VIRTUAL_MAP[u]; }
 
 // ============================================================
-//  STORAGE HELPERS
+//  STORAGE HELPERS - using localStorage (persists across reloads)
 // ============================================================
 async function sGet(key, shared = true) {
-  try { const r = await window.storage.get(key, shared); return r ? r.value : null; }
-  catch { return null; }
+  try {
+    const v = localStorage.getItem('dot:' + key);
+    return v;
+  } catch { return null; }
 }
 async function sSet(key, value, shared = true) {
-  try { return await window.storage.set(key, value, shared); } catch { return null; }
+  try {
+    localStorage.setItem('dot:' + key, value);
+    return { key, value };
+  } catch { return null; }
 }
 async function sList(prefix, shared = true) {
-  try { const r = await window.storage.list(prefix, shared); return r ? r.keys : []; }
-  catch { return []; }
+  try {
+    const keys = [];
+    const fullPrefix = 'dot:' + prefix;
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith(fullPrefix)) {
+        keys.push(k.replace('dot:', ''));
+      }
+    }
+    return keys;
+  } catch { return []; }
 }
 
 function chatKey(a, b) { return 'chat:' + [a, b].sort().join('|'); }
@@ -1241,10 +1255,16 @@ async function enterApp() {
   if (State.pollTimer) clearInterval(State.pollTimer);
   State.pollTimer = setInterval(pollTick, 1500);
   
-  // Refresh immediately when tab becomes visible (browser throttles inactive tabs)
+  // Refresh immediately when tab becomes visible
   document.addEventListener('visibilitychange', onVisibilityChange);
-  // Also refresh when window regains focus
   window.addEventListener('focus', forceRefresh);
+  // Cross-tab sync via localStorage events — INSTANT updates between tabs
+  window.addEventListener('storage', onStorageEvent);
+}
+
+function onStorageEvent(e) {
+  if (!State.currentUser || !e.key || !e.key.startsWith('dot:')) return;
+  forceRefresh();
 }
 
 async function pollTick() {
@@ -2053,6 +2073,7 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
   if (State.botReplyTimer) clearTimeout(State.botReplyTimer);
   document.removeEventListener('visibilitychange', onVisibilityChange);
   window.removeEventListener('focus', forceRefresh);
+  window.removeEventListener('storage', onStorageEvent);
   State.currentUser = null;
   State.activeChat = null;
   State.friends = [];
