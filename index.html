@@ -1,7 +1,8 @@
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   
-  /* DARK MODE (default) — red outlines, grey interior */
+  /* DARK MODE (default) */
   :root {
     --bg: #2A2A2A;
     --card: #363636;
@@ -18,7 +19,6 @@
     --bubble-theirs: #4A4A4A;
     --bubble-theirs-text: #F5F5F5;
     --chat-bg: #1F1F1F;
-    --shadow: 0 1px 3px rgba(0,0,0,0.4);
     --shadow-strong: 0 12px 32px rgba(0,0,0,0.5);
     --danger: #EF4444;
     --input-bg: #2A2A2A;
@@ -26,7 +26,7 @@
     --section-bg: #2F2F2F;
   }
   
-  /* LIGHT MODE — red outlines, cream-red interior */
+  /* LIGHT MODE */
   [data-theme="light"] {
     --bg: #FFE4D6;
     --card: #FFF5EE;
@@ -43,7 +43,6 @@
     --bubble-theirs: #FFFFFF;
     --bubble-theirs-text: #2D1410;
     --chat-bg: #F5C6B0;
-    --shadow: 0 1px 3px rgba(220, 38, 38, 0.12);
     --shadow-strong: 0 12px 32px rgba(220, 38, 38, 0.18);
     --danger: #B91C1C;
     --input-bg: #FFFFFF;
@@ -62,48 +61,58 @@
   }
   
   #app {
-    height: 100vh; width: 100%;
-    display: flex; flex-direction: column;
-    max-width: 480px; margin: 0 auto;
+    height: 100vh;
+    height: 100dvh;
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
     background: var(--bg);
-    position: relative; overflow: hidden;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
   }
   
   /* AUTH */
   .auth-screen {
-    flex: 1; display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    padding: 32px 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(20px, 5vh, 32px) 20px;
     background: linear-gradient(180deg, #DC2626 0%, #7F1D1D 100%);
     color: white;
+    overflow-y: auto;
   }
   .logo {
-    width: 88px; height: 88px; border-radius: 50%;
-    background: white; display: flex;
-    align-items: center; justify-content: center;
-    margin-bottom: 16px;
+    width: 72px; height: 72px;
+    border-radius: 50%; background: white;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 12px;
     box-shadow: 0 12px 32px rgba(0,0,0,0.3);
     border: 3px solid #FCA5A5;
+    flex-shrink: 0;
   }
   .logo::after {
-    content: ''; width: 28px; height: 28px;
+    content: ''; width: 24px; height: 24px;
     border-radius: 50%; background: #DC2626;
   }
-  .brand { font-size: 36px; font-weight: 800; letter-spacing: -1px; }
-  .tagline { font-size: 14px; opacity: 0.9; margin: 4px 0 32px; }
+  .brand { font-size: 30px; font-weight: 800; letter-spacing: -1px; }
+  .tagline { font-size: 13px; opacity: 0.9; margin: 4px 0 24px; }
   .auth-card {
-    background: var(--card); border-radius: 20px;
-    padding: 28px 24px; width: 100%; max-width: 360px;
+    background: var(--card); border-radius: 18px;
+    padding: 22px 20px; width: 100%; max-width: 360px;
     box-shadow: var(--shadow-strong); color: var(--text);
     border: 2px solid var(--border);
   }
   .auth-tabs {
     display: flex; background: var(--bg);
-    border-radius: 12px; padding: 4px; margin-bottom: 24px;
+    border-radius: 12px; padding: 4px; margin-bottom: 20px;
     border: 1px solid var(--border-soft);
   }
   .auth-tab {
-    flex: 1; padding: 10px; text-align: center;
+    flex: 1; padding: 9px;
     border-radius: 8px; font-size: 14px; font-weight: 600;
     cursor: pointer; color: var(--text-soft);
     border: none; background: transparent; font-family: inherit;
@@ -111,37 +120,36 @@
   }
   .auth-tab.active { background: var(--accent); color: white; }
   
-  .field { margin-bottom: 14px; }
+  .field { margin-bottom: 12px; }
   .field label {
-    display: block; font-size: 12px; font-weight: 700;
-    color: var(--accent); margin-bottom: 6px;
+    display: block; font-size: 11px; font-weight: 700;
+    color: var(--accent); margin-bottom: 5px;
     text-transform: uppercase; letter-spacing: 0.5px;
   }
   .field input {
-    width: 100%; padding: 14px 16px;
-    border: 2px solid var(--border); border-radius: 12px;
+    width: 100%; padding: 12px 14px;
+    border: 2px solid var(--border); border-radius: 10px;
     font-size: 15px; font-family: inherit; outline: none;
     background: var(--input-bg); color: var(--text);
-    transition: border-color 0.2s;
   }
-  .field input:focus { border-color: var(--accent-dark); box-shadow: 0 0 0 3px var(--accent-light); }
+  .field input:focus { border-color: var(--accent-dark); }
   
   .btn-primary {
-    padding: 14px 20px;
+    padding: 13px 18px;
     background: var(--accent); color: white;
-    border: 2px solid var(--accent-dark); border-radius: 12px;
+    border: 2px solid var(--accent-dark); border-radius: 10px;
     font-size: 15px; font-weight: 700;
     cursor: pointer; font-family: inherit;
     transition: all 0.15s;
   }
-  .btn-primary.full { width: 100%; margin-top: 8px; }
+  .btn-primary.full { width: 100%; margin-top: 6px; }
   .btn-primary:hover { background: var(--accent-dark); }
   .btn-primary:active { transform: scale(0.98); }
   .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
   
   .alert {
-    padding: 10px 14px; border-radius: 10px;
-    font-size: 13px; margin-bottom: 12px; display: none;
+    padding: 9px 12px; border-radius: 10px;
+    font-size: 13px; margin-bottom: 10px; display: none;
     border: 1px solid var(--accent);
     background: var(--accent-light); color: var(--accent);
   }
@@ -150,26 +158,27 @@
   /* HEADER */
   .header {
     background: var(--card); border-bottom: 2px solid var(--border);
-    padding: 14px 16px; display: flex;
-    align-items: center; gap: 12px;
-    min-height: 56px; z-index: 10;
+    padding: 12px 14px; display: flex;
+    align-items: center; gap: 10px;
+    min-height: 54px; z-index: 10;
+    flex-shrink: 0;
   }
-  .header-title { font-size: 19px; font-weight: 700; flex: 1; color: var(--text); }
+  .header-title { font-size: 18px; font-weight: 700; flex: 1; color: var(--text); }
   .header-btn {
     background: var(--accent); border: 2px solid var(--accent-dark);
     cursor: pointer; padding: 0; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     color: white; font-family: inherit;
-    width: 36px; height: 36px; font-size: 22px; font-weight: 700;
-    transition: all 0.15s;
+    width: 34px; height: 34px; font-size: 22px; font-weight: 700;
+    flex-shrink: 0;
   }
   .header-btn:hover { background: var(--accent-dark); }
   
   /* LISTS */
-  .list-screen { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--card); }
-  .scroll-list { flex: 1; overflow-y: auto; }
+  .list-screen { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--card); min-height: 0; }
+  .scroll-list { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
   .section-label {
-    padding: 10px 16px; font-size: 12px; font-weight: 700;
+    padding: 9px 14px; font-size: 11px; font-weight: 700;
     color: var(--accent); text-transform: uppercase;
     letter-spacing: 0.8px; background: var(--section-bg);
     border-top: 1px solid var(--border-soft);
@@ -177,66 +186,68 @@
   }
   .row {
     display: flex; align-items: center;
-    padding: 12px 16px; gap: 12px;
+    padding: 11px 14px; gap: 12px;
     cursor: pointer; border-bottom: 1px solid var(--border-soft);
-    transition: background 0.15s;
     background: var(--card);
+    min-height: 60px;
   }
   .row.no-click { cursor: default; }
   .row:not(.no-click):hover { background: var(--hover); }
   
   .avatar {
-    width: 48px; height: 48px; border-radius: 14px;
+    width: 44px; height: 44px; border-radius: 13px;
     display: flex; align-items: center; justify-content: center;
-    color: white; font-weight: 700; font-size: 18px;
+    color: white; font-weight: 700; font-size: 17px;
     flex-shrink: 0; border: 2px solid var(--border);
   }
   .row-info { flex: 1; min-width: 0; }
   .row-name {
-    font-size: 15px; font-weight: 600; margin-bottom: 2px;
+    font-size: 14.5px; font-weight: 600; margin-bottom: 2px;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     display: flex; align-items: center; gap: 6px;
     color: var(--text);
   }
   .row-sub {
-    font-size: 13px; color: var(--text-soft);
+    font-size: 12.5px; color: var(--text-soft);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .row-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
-  .row-time { font-size: 11px; color: var(--text-soft); }
+  .row-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
+  .row-time { font-size: 10.5px; color: var(--text-soft); }
   
   .bot-tag {
     background: var(--accent); color: white;
     font-size: 9px; font-weight: 800;
-    padding: 1px 6px; border-radius: 4px;
+    padding: 1px 5px; border-radius: 4px;
     letter-spacing: 0.5px;
     border: 1px solid var(--accent-dark);
   }
   
-  .empty-state { padding: 50px 24px; text-align: center; color: var(--text-soft); }
-  .empty-state .emoji { font-size: 48px; margin-bottom: 12px; }
+  .empty-state { padding: 40px 22px; text-align: center; color: var(--text-soft); }
+  .empty-state .emoji { font-size: 44px; margin-bottom: 10px; }
   .empty-state-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
-  .empty-state-text { font-size: 13px; line-height: 1.5; margin-bottom: 16px; }
+  .empty-state-text { font-size: 13px; line-height: 1.5; }
   
   /* TAB BAR */
   .tab-bar {
     display: flex; background: var(--card);
-    border-top: 2px solid var(--border); padding: 6px 0 8px;
+    border-top: 2px solid var(--border); padding: 5px 0 6px;
+    flex-shrink: 0;
+    padding-bottom: max(6px, env(safe-area-inset-bottom));
   }
   .tab {
     flex: 1; background: transparent; border: none;
-    padding: 6px; cursor: pointer; position: relative;
+    padding: 5px; cursor: pointer; position: relative;
     display: flex; flex-direction: column; align-items: center; gap: 2px;
     color: var(--text-soft); font-family: inherit;
-    font-size: 11px; font-weight: 600; transition: color 0.15s;
+    font-size: 10.5px; font-weight: 600;
   }
   .tab.active { color: var(--accent); }
-  .tab .icon { font-size: 22px; line-height: 1; }
+  .tab .icon { font-size: 21px; line-height: 1; }
   .tab-badge {
     position: absolute; top: 0; right: calc(50% - 22px);
     background: var(--accent); color: white;
     font-size: 10px; font-weight: 700;
-    padding: 1px 6px; border-radius: 10px;
+    padding: 1px 5px; border-radius: 10px;
     min-width: 18px; text-align: center;
     border: 2px solid var(--card);
   }
@@ -255,43 +266,43 @@
   .chat-header {
     background: var(--card);
     border-bottom: 2px solid var(--border);
-    padding: 10px 12px; display: flex;
-    align-items: center; gap: 10px; min-height: 56px;
+    padding: 9px 10px; display: flex;
+    align-items: center; gap: 10px; min-height: 54px;
+    flex-shrink: 0;
   }
   .back-btn {
     width: 36px; height: 36px; border: none;
     background: transparent; cursor: pointer; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 24px; color: var(--accent); font-family: inherit;
+    font-size: 26px; color: var(--accent); font-family: inherit;
     font-weight: 700;
+    flex-shrink: 0;
   }
   .back-btn:hover { background: var(--hover); }
   .chat-avatar { width: 36px; height: 36px; border-radius: 12px; font-size: 14px; }
   .chat-name-block { flex: 1; min-width: 0; }
   .chat-name {
-    font-size: 16px; font-weight: 700;
+    font-size: 15px; font-weight: 700;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     display: flex; align-items: center; gap: 6px;
     color: var(--text);
   }
-  .chat-handle { font-size: 12px; color: var(--text-soft); }
+  .chat-handle { font-size: 11.5px; color: var(--text-soft); }
   
   .messages {
-    flex: 1; overflow-y: auto; padding: 16px 12px;
+    flex: 1; overflow-y: auto; padding: 14px 10px;
     display: flex; flex-direction: column; gap: 4px;
+    -webkit-overflow-scrolling: touch;
   }
-  .msg-row {
-    display: flex; margin-bottom: 2px; max-width: 100%;
-    align-items: flex-end; gap: 6px;
-  }
+  .msg-row { display: flex; max-width: 100%; align-items: flex-end; gap: 6px; }
   .msg-row.mine { justify-content: flex-end; }
-  .msg-avatar { width: 36px; height: 36px; border-radius: 12px; font-size: 14px; flex-shrink: 0; }
-  .bubble-wrap { display: flex; flex-direction: column; max-width: 70%; }
+  .msg-avatar { width: 34px; height: 34px; border-radius: 11px; font-size: 13px; flex-shrink: 0; }
+  .bubble-wrap { display: flex; flex-direction: column; max-width: 72%; }
   .msg-row.mine .bubble-wrap { align-items: flex-end; }
   .msg-row.theirs .bubble-wrap { align-items: flex-start; }
   
   .bubble {
-    padding: 9px 13px; border-radius: 18px;
+    padding: 9px 13px; border-radius: 17px;
     font-size: 14.5px; line-height: 1.4;
     word-wrap: break-word; overflow-wrap: anywhere;
     white-space: pre-wrap;
@@ -308,9 +319,8 @@
     border-bottom-left-radius: 4px;
   }
   .msg-time {
-    font-size: 10.5px; color: var(--text);
-    opacity: 0.7;
-    margin: 2px 6px 0;
+    font-size: 10px; color: var(--text);
+    opacity: 0.7; margin: 2px 6px 0;
   }
   .day-divider {
     text-align: center; margin: 12px 0 8px;
@@ -325,7 +335,7 @@
   
   .typing-indicator {
     display: flex; gap: 4px; padding: 12px 14px;
-    background: var(--bubble-theirs); border-radius: 18px;
+    background: var(--bubble-theirs); border-radius: 17px;
     border-bottom-left-radius: 4px; width: fit-content;
     border: 2px solid var(--border);
   }
@@ -342,97 +352,93 @@
   
   .composer {
     background: var(--card); border-top: 2px solid var(--border);
-    padding: 8px 10px; display: flex; gap: 8px; align-items: flex-end;
+    padding: 7px 9px; display: flex; gap: 7px; align-items: flex-end;
+    flex-shrink: 0;
+    padding-bottom: max(7px, env(safe-area-inset-bottom));
   }
   .composer textarea {
     flex: 1; border: 2px solid var(--border);
-    border-radius: 20px; padding: 9px 14px;
+    border-radius: 18px; padding: 8px 13px;
     font-size: 15px; font-family: inherit;
     resize: none; outline: none;
-    max-height: 100px; min-height: 38px; line-height: 1.3;
+    max-height: 100px; min-height: 36px; line-height: 1.3;
     background: var(--input-bg); color: var(--text);
   }
   .composer textarea:focus { border-color: var(--accent-dark); }
   .send-btn {
-    width: 38px; height: 38px; border-radius: 50%;
+    width: 36px; height: 36px; border-radius: 50%;
     background: var(--accent); color: white;
     border: 2px solid var(--accent-dark);
-    cursor: pointer; font-size: 18px; flex-shrink: 0;
+    cursor: pointer; font-size: 17px; flex-shrink: 0;
     display: flex; align-items: center; justify-content: center;
-    transition: all 0.15s; font-family: inherit;
+    font-family: inherit;
   }
-  .send-btn:disabled { background: var(--text-soft); border-color: var(--text-soft); cursor: not-allowed; }
+  .send-btn:disabled { background: var(--text-soft); border-color: var(--text-soft); }
   .send-btn:not(:disabled):hover { background: var(--accent-dark); }
   .send-btn:not(:disabled):active { transform: scale(0.92); }
   
   /* PROFILE */
-  .profile-screen { flex: 1; overflow-y: auto; background: var(--bg); }
+  .profile-screen { flex: 1; overflow-y: auto; background: var(--bg); -webkit-overflow-scrolling: touch; }
   .profile-header {
     background: linear-gradient(180deg, #DC2626 0%, #7F1D1D 100%);
-    padding: 32px 20px 28px; color: white;
-    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    padding: 28px 18px 22px; color: white;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
   }
   .profile-avatar {
-    width: 84px; height: 84px; border-radius: 24px;
-    font-size: 36px; border: 4px solid rgba(255,255,255,0.4);
+    width: 76px; height: 76px; border-radius: 22px;
+    font-size: 32px; border: 4px solid rgba(255,255,255,0.4);
   }
   .profile-name-row { display: flex; align-items: center; gap: 8px; }
-  .profile-name { font-size: 22px; font-weight: 700; }
+  .profile-name { font-size: 20px; font-weight: 700; }
   .edit-icon {
     background: rgba(255,255,255,0.25); border: 1px solid rgba(255,255,255,0.5);
     color: white;
-    width: 28px; height: 28px; border-radius: 50%;
-    cursor: pointer; font-size: 13px; font-family: inherit;
+    width: 26px; height: 26px; border-radius: 50%;
+    cursor: pointer; font-size: 12px; font-family: inherit;
     display: flex; align-items: center; justify-content: center;
   }
   .edit-icon:hover { background: rgba(255,255,255,0.4); }
-  .profile-handle { font-size: 14px; opacity: 0.9; }
+  .profile-handle { font-size: 13px; opacity: 0.9; }
   .profile-bio {
     font-size: 13px;
     color: rgba(255,255,255,0.95);
     text-align: center;
     max-width: 280px;
     line-height: 1.4;
-    margin-top: 6px;
-    padding: 8px 14px;
+    margin-top: 4px;
+    padding: 7px 13px;
     background: rgba(0,0,0,0.2);
-    border-radius: 12px;
+    border-radius: 11px;
     border: 1px solid rgba(255,255,255,0.3);
     word-wrap: break-word;
   }
   .profile-bio.empty { display: none; }
-  .profile-row.tappable { cursor: pointer; transition: background 0.15s; }
+  .profile-section {
+    background: var(--card); margin-top: 10px;
+    border-top: 2px solid var(--border);
+    border-bottom: 2px solid var(--border);
+  }
+  .profile-row {
+    padding: 13px 16px; border-bottom: 1px solid var(--border-soft);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 14px;
+    gap: 12px;
+  }
+  .profile-row:last-child { border-bottom: none; }
+  .profile-row .label { color: var(--text-soft); flex-shrink: 0; }
+  .profile-row .value { font-weight: 600; color: var(--text); text-align: right; min-width: 0; }
+  .profile-row.tappable { cursor: pointer; }
   .profile-row.tappable:hover { background: var(--hover); }
   .bio-value {
-    max-width: 60%;
-    text-align: right;
+    max-width: 65%;
     white-space: normal;
     word-wrap: break-word;
     line-height: 1.3;
   }
   .bio-value.placeholder { color: var(--text-soft); font-weight: 400; font-style: italic; }
-  .friend-bio {
-    font-size: 12px;
-    color: var(--text-soft);
-    margin-top: 2px;
-    font-style: italic;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .profile-section {
-    background: var(--card); margin-top: 12px;
-    border-top: 2px solid var(--border);
-    border-bottom: 2px solid var(--border);
-  }
-  .profile-row {
-    padding: 14px 18px; border-bottom: 1px solid var(--border-soft);
-    display: flex; justify-content: space-between; align-items: center; font-size: 14px;
-  }
-  .profile-row:last-child { border-bottom: none; }
-  .profile-row .label { color: var(--text-soft); }
-  .profile-row .value { font-weight: 600; color: var(--text); }
   
   .toggle {
-    position: relative; width: 48px; height: 26px;
+    position: relative; width: 46px; height: 26px;
     background: var(--text-soft); border-radius: 13px;
     cursor: pointer; transition: background 0.2s;
     border: 2px solid var(--border);
@@ -446,15 +452,14 @@
     border-radius: 50%; background: white;
     transition: transform 0.2s;
   }
-  .toggle.on::after { transform: translateX(22px); }
+  .toggle.on::after { transform: translateX(20px); }
   
   .logout-btn {
-    width: calc(100% - 32px); margin: 16px; padding: 14px;
+    width: calc(100% - 28px); margin: 14px; padding: 12px;
     background: var(--card); color: var(--accent);
     border: 2px solid var(--accent);
-    border-radius: 12px; font-size: 15px; font-weight: 700;
+    border-radius: 11px; font-size: 14px; font-weight: 700;
     cursor: pointer; font-family: inherit;
-    transition: all 0.15s;
   }
   .logout-btn:hover { background: var(--accent); color: white; }
   
@@ -477,67 +482,75 @@
   }
   .sheet.open { transform: translateY(0); }
   .sheet-handle {
-    width: 40px; height: 4px; background: var(--accent);
+    width: 38px; height: 4px; background: var(--accent);
     border-radius: 2px; margin: 8px auto 4px;
   }
   .sheet-header {
-    padding: 14px 18px 12px;
+    padding: 12px 16px 10px;
     display: flex; align-items: center;
     border-bottom: 2px solid var(--border);
   }
-  .sheet-title { font-size: 17px; font-weight: 700; flex: 1; color: var(--text); }
+  .sheet-title { font-size: 16px; font-weight: 700; flex: 1; color: var(--text); }
   .sheet-close {
     background: transparent; border: 2px solid var(--border);
     color: var(--accent);
-    width: 32px; height: 32px; border-radius: 50%;
-    font-size: 16px; cursor: pointer; font-family: inherit;
+    width: 30px; height: 30px; border-radius: 50%;
+    font-size: 15px; cursor: pointer; font-family: inherit;
     display: flex; align-items: center; justify-content: center;
   }
   .sheet-close:hover { background: var(--accent); color: white; }
-  .sheet-body { padding: 16px; overflow-y: auto; flex: 1; }
+  .sheet-body { padding: 14px; overflow-y: auto; flex: 1; -webkit-overflow-scrolling: touch; }
   
   .search-input {
-    width: 100%; padding: 12px 14px;
-    border: 2px solid var(--border); border-radius: 12px;
-    font-size: 15px; font-family: inherit; outline: none;
+    width: 100%; padding: 11px 13px;
+    border: 2px solid var(--border); border-radius: 11px;
+    font-size: 14.5px; font-family: inherit; outline: none;
     background: var(--input-bg); color: var(--text);
-    margin-bottom: 14px;
+    margin-bottom: 12px;
   }
   .search-input:focus { border-color: var(--accent-dark); }
   
   .suggestions-list {
     background: var(--card-2);
     border: 2px solid var(--border);
-    border-radius: 12px;
+    border-radius: 11px;
     overflow: hidden;
   }
   .suggestion-row {
     display: flex; align-items: center;
-    padding: 12px; gap: 12px;
+    padding: 10px 11px; gap: 11px;
     border-bottom: 1px solid var(--border-soft);
   }
   .suggestion-row:last-child { border-bottom: none; }
   .suggestion-row.bot-row { background: var(--accent-light); }
+  .friend-bio {
+    font-size: 11.5px;
+    color: var(--text-soft);
+    margin-top: 2px;
+    font-style: italic;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
   
   .pill-btn {
-    padding: 7px 14px; border: 2px solid transparent; border-radius: 14px;
-    font-size: 12px; font-weight: 700;
-    cursor: pointer; font-family: inherit; transition: all 0.15s;
+    padding: 6px 12px; border: 2px solid transparent; border-radius: 13px;
+    font-size: 11.5px; font-weight: 700;
+    cursor: pointer; font-family: inherit;
     white-space: nowrap;
+    flex-shrink: 0;
   }
   .pill-btn.primary { background: var(--accent); color: white; border-color: var(--accent-dark); }
   .pill-btn.primary:hover { background: var(--accent-dark); }
   .pill-btn.danger { background: var(--card); color: var(--danger); border-color: var(--danger); }
   .pill-btn.danger:hover { background: var(--danger); color: white; }
   .pill-btn.muted { background: transparent; color: var(--text-soft); border-color: var(--border-soft); cursor: default; }
-  .btn-group { display: flex; gap: 6px; }
+  .btn-group { display: flex; gap: 5px; flex-shrink: 0; }
   
   /* DIALOG */
   .dialog {
     position: absolute; top: 50%; left: 50%;
     transform: translate(-50%, -50%) scale(0.95);
     background: var(--card); border-radius: 16px;
-    padding: 24px; width: calc(100% - 48px); max-width: 320px;
+    padding: 22px; width: calc(100% - 36px); max-width: 320px;
     z-index: 32; opacity: 0; pointer-events: none;
     transition: all 0.2s;
     border: 2px solid var(--border);
@@ -547,19 +560,19 @@
     opacity: 1; pointer-events: auto;
     transform: translate(-50%, -50%) scale(1);
   }
-  .dialog-title { font-size: 17px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
-  .dialog-text { font-size: 13px; color: var(--text-soft); margin-bottom: 14px; }
+  .dialog-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+  .dialog-text { font-size: 12.5px; color: var(--text-soft); margin-bottom: 12px; }
   .dialog-input {
-    width: 100%; padding: 12px 14px;
-    border: 2px solid var(--border); border-radius: 10px;
-    font-size: 15px; font-family: inherit; outline: none;
+    width: 100%; padding: 11px 13px;
+    border: 2px solid var(--border); border-radius: 9px;
+    font-size: 14.5px; font-family: inherit; outline: none;
     background: var(--input-bg); color: var(--text);
   }
   .dialog-input:focus { border-color: var(--accent-dark); }
-  .dialog-actions { display: flex; gap: 8px; margin-top: 14px; }
+  .dialog-actions { display: flex; gap: 7px; margin-top: 12px; }
   .dialog-actions button {
-    flex: 1; padding: 11px; border: 2px solid;
-    border-radius: 10px; font-size: 14px; font-weight: 700;
+    flex: 1; padding: 10px; border: 2px solid;
+    border-radius: 9px; font-size: 13.5px; font-weight: 700;
     cursor: pointer; font-family: inherit;
   }
   .dialog-actions .cancel { background: var(--card); color: var(--text-soft); border-color: var(--border-soft); }
@@ -567,7 +580,7 @@
   
   .hidden { display: none !important; }
   
-  /* AVATARS */
+  /* AVATAR COLORS */
   .av-1 { background: #DC2626; }
   .av-2 { background: #F87171; }
   .av-3 { background: #B91C1C; }
@@ -577,6 +590,21 @@
   .av-7 { background: #7F1D1D; }
   .av-8 { background: #DC2626; }
   .av-bot { background: linear-gradient(135deg, #1F1F1F, #4A4A4A); border-color: var(--accent); }
+  .av-buddy { background: linear-gradient(135deg, #DC2626, #F87171); border-color: var(--accent-dark); }
+  
+  /* small screens fine-tune */
+  @media (max-height: 600px) {
+    .auth-screen { padding-top: 12px; padding-bottom: 12px; }
+    .logo { width: 56px; height: 56px; margin-bottom: 6px; }
+    .logo::after { width: 18px; height: 18px; }
+    .brand { font-size: 26px; }
+    .tagline { margin-bottom: 14px; }
+    .auth-card { padding: 16px 16px; }
+    .auth-tabs { margin-bottom: 14px; }
+    .field { margin-bottom: 9px; }
+    .profile-header { padding: 18px 18px 14px; }
+    .profile-avatar { width: 64px; height: 64px; font-size: 26px; }
+  }
 </style>
 
 <div id="app">
@@ -608,7 +636,7 @@
   </div>
   
   <!-- MAIN -->
-  <div id="mainApp" class="hidden" style="flex:1; display:flex; flex-direction:column; overflow:hidden;">
+  <div id="mainApp" class="hidden" style="flex:1; display:flex; flex-direction:column; overflow:hidden; min-height:0;">
     <div id="chatsTab" class="list-screen">
       <div class="header">
         <div class="header-title">Chats</div>
@@ -630,7 +658,7 @@
           <button class="edit-icon" id="editNameBtn" title="Edit display name">✎</button>
         </div>
         <div class="profile-handle" id="profileHandle">@—</div>
-        <div class="profile-bio" id="profileHeaderBio"></div>
+        <div class="profile-bio empty" id="profileHeaderBio"></div>
       </div>
       <div class="profile-section">
         <div class="profile-row tappable" id="editBioRow">
@@ -703,8 +731,8 @@
   
   <div id="bioDialog" class="dialog">
     <div class="dialog-title">Edit bio</div>
-    <div class="dialog-text">Tell others a little about you. Max 120 characters.</div>
-    <textarea id="bioInput" class="dialog-input" maxlength="120" rows="3" style="resize:none; min-height:70px; line-height:1.4;"></textarea>
+    <div class="dialog-text">Tell others about you. Max 120 characters.</div>
+    <textarea id="bioInput" class="dialog-input" maxlength="120" rows="3" style="resize:none; min-height:64px; line-height:1.4;"></textarea>
     <div style="font-size:11px; color:var(--text-soft); text-align:right; margin-top:4px;"><span id="bioCharCount">0</span>/120</div>
     <div class="dialog-actions">
       <button class="cancel" id="cancelBioBtn">Cancel</button>
@@ -714,6 +742,9 @@
 </div>
 
 <script>
+// ============================================================
+//  STATE
+// ============================================================
 const State = {
   currentUser: null,
   activeChat: null,
@@ -721,25 +752,42 @@ const State = {
   chatPreviews: {},
   inbox: [],
   userCache: {},
-  messages: {},     // chatKey -> array of msgs (in-memory cache, source of truth)
+  messages: {},     // chatKey -> msg array (in-memory cache)
   pollTimer: null,
   botReplyTimer: null,
   theme: 'dark',
+  sentRequests: [], // who I've sent requests to (personal)
+  buddyAccepted: false, // has buddy accepted my pending request yet?
 };
 
-const BOT_USERNAME = 'testbot';
-const BOT_DISPLAY = 'Test Bot';
-
-// Virtual bot — always exists even if storage fails
-const BOT_USER = {
-  username: BOT_USERNAME,
-  displayName: BOT_DISPLAY,
-  bio: '🤖 Always online · here to help you test the chat',
-  joined: Date.now(),
+// ============================================================
+//  VIRTUAL USERS (bots/buddies for testing)
+// ============================================================
+const TESTBOT = {
+  username: 'testbot',
+  displayName: 'Test Bot',
+  bio: '🤖 Auto-accepts · Always replies · Use me to test chats',
   isBot: true,
+  autoAccept: true,
 };
 
-// ---- Storage ----
+const BUDDY = {
+  username: 'buddy',
+  displayName: 'Buddy',
+  bio: '👋 Acts like a real friend! I\'ll send you a request and accept yours after a few seconds.',
+  isBot: true,
+  autoAccept: false,    // doesn't auto-accept; you accept their request from inbox
+  sendsInitialRequest: true,  // sends YOU a request when you sign up
+  delayedAccept: true,  // accepts your request after a delay
+};
+
+const VIRTUAL_USERS = [TESTBOT, BUDDY];
+const VIRTUAL_MAP = Object.fromEntries(VIRTUAL_USERS.map(u => [u.username, u]));
+function isVirtual(u) { return !!VIRTUAL_MAP[u]; }
+
+// ============================================================
+//  STORAGE HELPERS
+// ============================================================
 async function sGet(key, shared = true) {
   try { const r = await window.storage.get(key, shared); return r ? r.value : null; }
   catch { return null; }
@@ -754,70 +802,69 @@ async function sList(prefix, shared = true) {
 
 function chatKey(a, b) { return 'chat:' + [a, b].sort().join('|'); }
 
-// Merge two message arrays, deduping by (from, t, text). Sorts by time.
-// This prevents data loss when concurrent reads-then-writes race.
-function mergeMsgs(a, b) {
-  const seen = new Set();
-  const result = [];
-  for (const m of [...(a || []), ...(b || [])]) {
-    const id = (m.from || '') + '|' + (m.t || 0) + '|' + (m.text || '');
-    if (!seen.has(id)) {
-      seen.add(id);
-      result.push(m);
-    }
-  }
-  result.sort((x, y) => (x.t || 0) - (y.t || 0));
-  return result;
-}
-
-// Read messages from storage and merge with in-memory cache (cache wins for new local msgs)
-async function readAndMergeMessages(key) {
-  const raw = await sGet(key);
-  let storageMsgs = [];
-  if (raw) { try { storageMsgs = JSON.parse(raw); } catch {} }
-  const cached = State.messages[key] || [];
-  const merged = mergeMsgs(storageMsgs, cached);
-  State.messages[key] = merged;
-  return merged;
-}
-
-// Save messages to storage (after merging with whatever's there) — race-safe
-async function saveMergedMessages(key, newMsg) {
-  if (!State.messages[key]) State.messages[key] = [];
-  if (newMsg) State.messages[key].push(newMsg);
-  // Read-merge-write to handle concurrent updates
-  const raw = await sGet(key);
-  let storageMsgs = [];
-  if (raw) { try { storageMsgs = JSON.parse(raw); } catch {} }
-  const merged = mergeMsgs(storageMsgs, State.messages[key]);
-  if (merged.length > 500) merged.splice(0, merged.length - 500);
-  State.messages[key] = merged;
-  await sSet(key, JSON.stringify(merged));
-  return merged;
-}
-
 function hashPass(s) {
   let h = 0;
   for (let i = 0; i < s.length; i++) { h = ((h << 5) - h) + s.charCodeAt(i); h |= 0; }
   return 'h' + Math.abs(h).toString(36) + '_' + s.length;
 }
 
+// Merge messages by (from, t, text), dedupes and sorts. Race-safe.
+function mergeMsgs(a, b) {
+  const seen = new Set();
+  const result = [];
+  for (const m of [...(a || []), ...(b || [])]) {
+    const id = (m.from || '') + '|' + (m.t || 0) + '|' + (m.text || '');
+    if (!seen.has(id)) { seen.add(id); result.push(m); }
+  }
+  result.sort((x, y) => (x.t || 0) - (y.t || 0));
+  return result;
+}
+
+async function readAndMergeMessages(key) {
+  const raw = await sGet(key);
+  let storage = [];
+  if (raw) { try { storage = JSON.parse(raw); } catch {} }
+  const cached = State.messages[key] || [];
+  const merged = mergeMsgs(storage, cached);
+  State.messages[key] = merged;
+  return merged;
+}
+
+async function saveMergedMessages(key, newMsg) {
+  if (!State.messages[key]) State.messages[key] = [];
+  if (newMsg) State.messages[key].push(newMsg);
+  const raw = await sGet(key);
+  let storage = [];
+  if (raw) { try { storage = JSON.parse(raw); } catch {} }
+  const merged = mergeMsgs(storage, State.messages[key]);
+  if (merged.length > 500) merged.splice(0, merged.length - 500);
+  State.messages[key] = merged;
+  await sSet(key, JSON.stringify(merged));
+  return merged;
+}
+
+// ============================================================
+//  USER DATA
+// ============================================================
 async function getUser(username) {
+  if (!username) return null;
   if (State.userCache[username]) return State.userCache[username];
   const raw = await sGet('user:' + username);
   if (raw) {
     try {
       const u = JSON.parse(raw);
+      // schema migration / defaults
       if (!u.displayName) u.displayName = u.username;
       if (typeof u.bio !== 'string') u.bio = '';
       State.userCache[username] = u;
       return u;
     } catch {}
   }
-  // Bot fallback - even if storage failed, bot is always available
-  if (username === BOT_USERNAME) {
-    State.userCache[username] = BOT_USER;
-    return BOT_USER;
+  // Virtual user fallback
+  if (isVirtual(username)) {
+    const v = { ...VIRTUAL_MAP[username], joined: Date.now() };
+    State.userCache[username] = v;
+    return v;
   }
   return null;
 }
@@ -834,27 +881,62 @@ async function getInbox(username) {
   try { return JSON.parse(raw); } catch { return []; }
 }
 
+async function getSentRequests() {
+  const raw = await sGet('sentRequests:' + State.currentUser.username, false);
+  if (!raw) return [];
+  try { return JSON.parse(raw); } catch { return []; }
+}
+
+async function setSentRequests(arr) {
+  await sSet('sentRequests:' + State.currentUser.username, JSON.stringify(arr), false);
+  State.sentRequests = arr;
+}
+
 async function getAllUsernames() {
+  // Source 1: Read the global user registry (most reliable)
+  let usernames = [];
+  const registryRaw = await sGet('__user_registry__');
+  if (registryRaw) {
+    try { usernames = JSON.parse(registryRaw); } catch {}
+  }
+  
+  // Source 2: Also list by prefix as a backup (fills in any users missed from the registry)
   const keys = await sList('user:');
-  let usernames = keys.map(k => k.replace('user:', ''));
-  // Always make sure bot is in the list
-  if (!usernames.includes(BOT_USERNAME)) usernames.push(BOT_USERNAME);
+  for (const k of keys) {
+    const u = k.replace('user:', '');
+    if (!usernames.includes(u)) usernames.push(u);
+  }
+  
+  // Always include virtual users
+  for (const v of VIRTUAL_USERS) {
+    if (!usernames.includes(v.username)) usernames.push(v.username);
+  }
+  
   return usernames;
 }
 
-// ---- Theme ----
+async function registerUserInRegistry(username) {
+  // Read current registry, append, save back (race-safe-ish with merge)
+  const raw = await sGet('__user_registry__');
+  let registry = [];
+  if (raw) { try { registry = JSON.parse(raw); } catch {} }
+  if (!registry.includes(username)) {
+    registry.push(username);
+    await sSet('__user_registry__', JSON.stringify(registry));
+  }
+}
+
+// ============================================================
+//  THEME
+// ============================================================
 async function loadTheme() {
   const t = await sGet('app_theme', false);
-  // Default to dark
   State.theme = (t === 'light') ? 'light' : 'dark';
   applyTheme();
 }
 function applyTheme() {
-  if (State.theme === 'light') {
-    document.documentElement.setAttribute('data-theme', 'light');
-  } else {
-    document.documentElement.removeAttribute('data-theme');
-  }
+  if (State.theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  else document.documentElement.removeAttribute('data-theme');
   const toggle = document.getElementById('themeToggle');
   if (toggle) toggle.classList.toggle('on', State.theme === 'dark');
 }
@@ -864,77 +946,180 @@ async function toggleTheme() {
   await sSet('app_theme', State.theme, false);
 }
 
-// ---- Bot ----
-async function ensureBotExists() {
-  const existing = await sGet('user:' + BOT_USERNAME);
-  if (existing) return;
-  const botData = {
-    username: BOT_USERNAME,
-    displayName: BOT_DISPLAY,
-    bio: '🤖 Always online · here to help you test the chat',
-    passHash: hashPass('___bot_no_login___' + Math.random()),
-    joined: Date.now(),
-    isBot: true,
-  };
-  await sSet('user:' + BOT_USERNAME, JSON.stringify(botData));
-  await sSet('friends:' + BOT_USERNAME, JSON.stringify([]));
-  await sSet('inbox:' + BOT_USERNAME, JSON.stringify([]));
+// ============================================================
+//  ENSURE VIRTUAL USERS EXIST
+// ============================================================
+async function ensureVirtualUsersExist() {
+  for (const v of VIRTUAL_USERS) {
+    // Always register in the user registry
+    await registerUserInRegistry(v.username);
+    
+    const existing = await sGet('user:' + v.username);
+    if (existing) {
+      // Update displayName/bio if changed in code
+      try {
+        const u = JSON.parse(existing);
+        let changed = false;
+        if (u.displayName !== v.displayName) { u.displayName = v.displayName; changed = true; }
+        if (u.bio !== v.bio) { u.bio = v.bio; changed = true; }
+        if (changed) await sSet('user:' + v.username, JSON.stringify(u));
+      } catch {}
+      continue;
+    }
+    const data = {
+      username: v.username,
+      displayName: v.displayName,
+      bio: v.bio,
+      passHash: hashPass('___virtual_' + Math.random()),
+      joined: Date.now(),
+      isBot: true,
+    };
+    await sSet('user:' + v.username, JSON.stringify(data));
+    await sSet('friends:' + v.username, JSON.stringify([]));
+    await sSet('inbox:' + v.username, JSON.stringify([]));
+  }
 }
 
+// ============================================================
+//  BUDDY: Send YOU a request (so you can test inbox/accept)
+// ============================================================
+async function ensureBuddyHasRequestedMe() {
+  const me = State.currentUser.username;
+  
+  // If buddy is already my friend, do nothing
+  const myFriends = await getFriends(me);
+  if (myFriends.includes(BUDDY.username)) return;
+  
+  // If I've already sent buddy a request, do nothing
+  const sent = await getSentRequests();
+  if (sent.includes(BUDDY.username)) return;
+  
+  // If buddy has already sent me a request (in my inbox), do nothing
+  const myInbox = await getInbox(me);
+  if (myInbox.find(r => r.from === BUDDY.username)) return;
+  
+  // Send buddy → me request
+  myInbox.push({ from: BUDDY.username, t: Date.now() });
+  await sSet('inbox:' + me, JSON.stringify(myInbox));
+}
+
+// Buddy auto-accepts requests from real users after a delay (simulates a person)
+async function processBuddyDelayedAccept() {
+  const me = State.currentUser.username;
+  const sent = await getSentRequests();
+  if (!sent.includes(BUDDY.username)) return;
+  
+  const myFriends = await getFriends(me);
+  if (myFriends.includes(BUDDY.username)) return; // already friends
+  
+  // Has the request been pending long enough? Use sentAt timestamp
+  const sentAtRaw = await sGet('buddyRequestAt:' + me, false);
+  if (!sentAtRaw) {
+    await sSet('buddyRequestAt:' + me, String(Date.now()), false);
+    return;
+  }
+  const sentAt = parseInt(sentAtRaw, 10);
+  if (Date.now() - sentAt < 4000) return; // wait 4 seconds
+  
+  // Buddy accepts!
+  if (!myFriends.includes(BUDDY.username)) myFriends.push(BUDDY.username);
+  await sSet('friends:' + me, JSON.stringify(myFriends));
+  
+  // Remove from sent requests
+  const newSent = sent.filter(u => u !== BUDDY.username);
+  await setSentRequests(newSent);
+  
+  // Send a welcome message from buddy
+  const key = chatKey(me, BUDDY.username);
+  const existingChat = await sGet(key);
+  if (!existingChat) {
+    const welcome = {
+      from: BUDDY.username,
+      text: `Hey ${State.currentUser.displayName}! Just accepted your request 😊 Thanks for adding me! Send me anything and I'll reply.`,
+      t: Date.now(),
+    };
+    await saveMergedMessages(key, welcome);
+  }
+  
+  await sSet('buddyRequestAt:' + me, '', false);
+}
+
+// ============================================================
+//  BOT REPLIES
+// ============================================================
 function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
-function botResponse(message) {
+function botResponse(message, who) {
   const lower = message.toLowerCase().trim();
+  
+  if (who === BUDDY.username) {
+    if (/^(hi|hello|hey|yo|sup|hola|howdy)\b/.test(lower))
+      return pick(["Hey!! 👋","Hi friend!","Yo what's up?","Hey :)"]);
+    if (/how (are|r) (you|u|ya)/.test(lower))
+      return "I'm good! Just hanging out. You?";
+    if (lower.includes('test'))
+      return "Yep, the friend system works! Try adding more accounts to test more.";
+    if (/(thank|thanks|ty)/.test(lower))
+      return "Of course! 💛";
+    if (/^(bye|cya|gn|night)/.test(lower))
+      return "Talk later! 👋";
+    return pick([
+      "Nice 😄",
+      "Cool, tell me more!",
+      "Haha sounds good",
+      "I'm just chillin' over here",
+      `"${message.slice(0,50)}${message.length>50?'…':''}" — got it!`,
+      "What else is new?",
+    ]);
+  }
+  
+  // testbot
   if (/^(hi|hello|hey|yo|sup|hola|howdy)\b/.test(lower))
     return pick(["Hey there! 👋","Hi! Nice to meet you.","Hello! How's it going?","Hey! 😊"]);
   if (/how (are|r) (you|u|ya)/.test(lower))
-    return "Doing great — just chilling in browser storage 🤖 How about you?";
+    return "Doing great — just chilling in browser storage 🤖 You?";
   if (lower.includes('test'))
-    return "✅ Chat system works! Try logging in as a different user in another tab to test real two-person chats.";
-  if (lower.includes('friend'))
-    return "Friend system: tap ➕ on Chats, see suggestions, tap Add. Real users get a request in their Inbox. I auto-accept!";
+    return "✅ Chat system works! Try adding 'buddy' to test the friend request flow with inbox & accept.";
+  if (lower.includes('friend') || lower.includes('buddy'))
+    return "Want to test friend requests? Add 'Buddy' from the + menu — they act like a real user (request goes to your inbox, accept it, then chat).";
   if (lower.includes('inbox'))
-    return "The Inbox shows incoming friend requests. The red badge counts pending. Accept or decline each one.";
+    return "The Inbox shows incoming friend requests. Try adding Buddy — they'll send you a request right away.";
   if (lower.includes('name'))
-    return "Change your display name from the Me tab — tap ✎ next to your name. Your username is permanent though!";
+    return "Change your display name from the Me tab — tap ✎ next to your name.";
+  if (lower.includes('bio'))
+    return "Set a bio from the Me tab — tap the Bio row. Others will see it when they search for you.";
   if (lower.includes('theme') || lower.includes('dark') || lower.includes('light'))
-    return "Toggle dark mode from the Me tab! Light mode = cream-red, dark mode = grey. Both have red outlines.";
+    return "Toggle dark mode from the Me tab! Both themes use red outlines.";
   if (lower.includes('bot'))
-    return "Yep, I'm a bot 🤖 I exist so you can test chat features without making a second account.";
-  if (/^(bye|cya|goodbye|gn|night)/.test(lower))
-    return "See you later! 👋";
+    return "Yep 🤖 I'm the auto-accept testbot. Buddy is the slow-accept testbot. Together we let you test everything!";
+  if (/^(bye|cya|gn|night)/.test(lower))
+    return "Bye! 👋";
   if (/(thank|thanks|ty)/.test(lower))
     return "You're welcome! 😊";
   if (lower.includes('?'))
     return pick([
-      "Good question! Try asking about 'friends', 'inbox', 'theme', or 'name'.",
-      "Hmm — I respond to keywords like 'test', 'friend', 'inbox', 'theme', 'name', 'bot'.",
-      "I'm not that smart, but I'm great for testing!",
+      "Try asking about 'friends', 'inbox', 'theme', 'name', or 'bio'.",
+      "I respond to keywords: test, friend, inbox, theme, name, bio, bot.",
     ]);
   return pick([
     "Got your message! ✓",
     `You said: "${message.slice(0,60)}${message.length>60?'…':''}" — stored.`,
     "Cool, I'm reading 👀",
-    "Thanks for the message!",
-    "Beep boop 🤖 — received!",
-    "Try asking me about 'friends', 'inbox', or 'theme'!",
+    "Try asking me about 'friends', 'inbox', or 'bio'!",
   ]);
 }
 
-async function triggerBotReply(userMessage) {
+async function triggerBotReply(targetUser, userMessage) {
   if (State.botReplyTimer) clearTimeout(State.botReplyTimer);
   showTyping(true);
   const delay = 700 + Math.random() * 800;
   State.botReplyTimer = setTimeout(async () => {
     showTyping(false);
-    const reply = botResponse(userMessage);
-    const key = chatKey(State.currentUser.username, BOT_USERNAME);
-    const newMsg = { from: BOT_USERNAME, text: reply, t: Date.now() };
-    
-    // Add to cache and save with merge (race-safe)
+    const reply = botResponse(userMessage, targetUser);
+    const key = chatKey(State.currentUser.username, targetUser);
+    const newMsg = { from: targetUser, text: reply, t: Date.now() };
     await saveMergedMessages(key, newMsg);
-    
-    if (State.activeChat && State.activeChat.username === BOT_USERNAME) {
+    if (State.activeChat && State.activeChat.username === targetUser) {
       renderMessages(State.messages[key], true);
     }
   }, delay);
@@ -944,11 +1129,14 @@ function showTyping(show) {
   const container = document.getElementById('messages');
   let typing = document.getElementById('typingRow');
   if (show) {
-    if (!typing && State.activeChat && State.activeChat.username === BOT_USERNAME) {
+    if (!typing && State.activeChat && isVirtual(State.activeChat.username)) {
+      const u = State.activeChat.username;
+      const avClass = u === BUDDY.username ? 'av-buddy' : 'av-bot';
+      const letter = u === BUDDY.username ? 'B' : '🤖';
       const div = document.createElement('div');
       div.id = 'typingRow';
       div.className = 'msg-row theirs';
-      div.innerHTML = `<div class="avatar msg-avatar av-bot">🤖</div><div class="bubble-wrap"><div class="typing-indicator"><span></span><span></span><span></span></div></div>`;
+      div.innerHTML = `<div class="avatar msg-avatar ${avClass}">${letter}</div><div class="bubble-wrap"><div class="typing-indicator"><span></span><span></span><span></span></div></div>`;
       container.appendChild(div);
       container.scrollTop = container.scrollHeight;
     }
@@ -957,7 +1145,9 @@ function showTyping(show) {
   }
 }
 
-// ---- Auth ----
+// ============================================================
+//  AUTH
+// ============================================================
 let authMode = 'login';
 
 document.querySelectorAll('.auth-tab').forEach(tab => {
@@ -991,7 +1181,7 @@ async function handleAuth() {
   
   if (!username || !password) return showError('Please enter a username and password.');
   if (!/^[a-z0-9_]{3,20}$/.test(username)) return showError('Username: 3–20 lowercase letters, numbers, or underscores.');
-  if (username === BOT_USERNAME) return showError('That username is reserved.');
+  if (isVirtual(username)) return showError('That username is reserved.');
   if (password.length < 4) return showError('Password must be at least 4 characters.');
   
   const btn = document.getElementById('authBtn');
@@ -1003,7 +1193,7 @@ async function handleAuth() {
     const existing = await sGet(userKey);
     
     if (authMode === 'signup') {
-      if (existing) return showError('That username is already taken. Choose another.');
+      if (existing) return showError('That username is already taken.');
       const userData = {
         username,
         displayName: displayName || username,
@@ -1014,13 +1204,17 @@ async function handleAuth() {
       await sSet(userKey, JSON.stringify(userData));
       await sSet('friends:' + username, JSON.stringify([]));
       await sSet('inbox:' + username, JSON.stringify([]));
+      await registerUserInRegistry(username);  // Add to global registry
       State.currentUser = userData;
     } else {
       if (!existing) return showError('No account found with that username.');
       const userData = JSON.parse(existing);
       if (userData.passHash !== hashPass(password)) return showError('Incorrect password.');
+      // Migrate missing fields
       if (!userData.displayName) userData.displayName = userData.username;
       if (typeof userData.bio !== 'string') userData.bio = '';
+      // Make sure existing accounts are in the registry too (heal old data)
+      await registerUserInRegistry(username);
       State.currentUser = userData;
     }
     await enterApp();
@@ -1036,36 +1230,138 @@ async function handleAuth() {
 async function enterApp() {
   document.getElementById('authScreen').classList.add('hidden');
   document.getElementById('mainApp').classList.remove('hidden');
-  await ensureBotExists();
+  
+  await ensureVirtualUsersExist();
+  await ensureBuddyHasRequestedMe();
+  
   await refreshAll();
   renderProfile();
+  
+  // Aggressive polling so messages and friend requests arrive quickly
   if (State.pollTimer) clearInterval(State.pollTimer);
-  State.pollTimer = setInterval(async () => {
-    if (State.activeChat) await loadMessages(State.activeChat.username, false);
-    else await refreshAll();
-  }, 2500);
+  State.pollTimer = setInterval(pollTick, 1500);
+  
+  // Refresh immediately when tab becomes visible (browser throttles inactive tabs)
+  document.addEventListener('visibilitychange', onVisibilityChange);
+  // Also refresh when window regains focus
+  window.addEventListener('focus', forceRefresh);
+}
+
+async function pollTick() {
+  if (!State.currentUser) return;
+  try {
+    await processBuddyDelayedAccept();
+    
+    // Always refresh inbox + friends so new requests/friends appear during chats too
+    const prevInboxCount = State.inbox.length;
+    const prevFriendCount = State.friends.length;
+    
+    if (State.activeChat) {
+      // In chat: load messages AND quietly refresh inbox/friends in parallel
+      await Promise.all([
+        loadMessages(State.activeChat.username, false),
+        quietRefreshInboxAndFriends(),
+      ]);
+    } else {
+      await refreshAll();
+    }
+    
+    // Toast when new request arrives mid-session
+    if (State.inbox.length > prevInboxCount) {
+      showToast('📥 New friend request!');
+    }
+    if (State.friends.length > prevFriendCount && !State.activeChat) {
+      showToast('🎉 You have a new friend!');
+    }
+  } catch (err) {
+    console.error('poll error', err);
+  }
+}
+
+async function quietRefreshInboxAndFriends() {
+  const me = State.currentUser.username;
+  const storageFriends = await getFriends(me);
+  const friendSet = new Set(storageFriends);
+  for (const f of State.friends) friendSet.add(f);
+  State.friends = Array.from(friendSet);
+  State.inbox = await getInbox(me);
+  
+  // Also update chat previews so the list stays fresh
+  for (const f of State.friends) {
+    const raw = await sGet(chatKey(me, f));
+    if (raw) {
+      try {
+        const msgs = JSON.parse(raw);
+        if (msgs.length) {
+          const last = msgs[msgs.length - 1];
+          State.chatPreviews[f] = {
+            lastMsg: last.text,
+            lastTime: last.t,
+            fromMe: last.from === me,
+          };
+        }
+      } catch {}
+    }
+  }
+  
+  updateInboxBadge();
+}
+
+function onVisibilityChange() {
+  if (document.visibilityState === 'visible') forceRefresh();
+}
+
+async function forceRefresh() {
+  if (!State.currentUser) return;
+  try {
+    if (State.activeChat) {
+      await loadMessages(State.activeChat.username, true);
+      await quietRefreshInboxAndFriends();
+    } else {
+      await refreshAll();
+    }
+  } catch {}
+}
+
+// Toast notification
+function showToast(text) {
+  let toast = document.getElementById('toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'toast';
+    toast.style.cssText = `
+      position: absolute; top: 70px; left: 50%; transform: translateX(-50%);
+      background: var(--accent); color: white; padding: 10px 16px;
+      border-radius: 22px; font-size: 13px; font-weight: 700;
+      border: 2px solid var(--accent-dark);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      z-index: 50; pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      opacity: 0;
+    `;
+    document.getElementById('app').appendChild(toast);
+  }
+  toast.textContent = text;
+  toast.style.opacity = '1';
+  toast.style.transform = 'translateX(-50%) translateY(0)';
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(() => { toast.style.opacity = '0'; }, 2400);
 }
 
 async function refreshAll() {
   if (!State.currentUser) return;
   State.userCache = {};
   
-  // Read friends from storage
+  // Load friends — merge storage + local + virtual flags
   const storageFriends = await getFriends(State.currentUser.username);
-  
-  // Check if user has the bot-added flag (personal storage, more reliable)
-  const botAdded = await sGet('botAdded:' + State.currentUser.username, false);
-  
-  // Merge: take storage list, but ALWAYS include bot if user has added it
   const friendSet = new Set(storageFriends);
-  if (botAdded === '1') friendSet.add(BOT_USERNAME);
-  // Also keep any locally-tracked friends (in case storage write hasn't propagated)
-  for (const f of State.friends) friendSet.add(f);
+  for (const f of State.friends) friendSet.add(f);  // keep local additions
   State.friends = Array.from(friendSet);
   
   State.inbox = await getInbox(State.currentUser.username);
+  State.sentRequests = await getSentRequests();
   
-  // Rebuild chat previews from storage
+  // Build chat previews
   const newPreviews = {};
   for (const f of State.friends) {
     const raw = await sGet(chatKey(State.currentUser.username, f));
@@ -1083,7 +1379,6 @@ async function refreshAll() {
       } catch {}
     }
   }
-  // Merge previews (use new from storage, keep old if storage has nothing yet)
   State.chatPreviews = { ...State.chatPreviews, ...newPreviews };
   
   await renderFriends();
@@ -1092,21 +1387,29 @@ async function refreshAll() {
   document.getElementById('profileFriendCount').textContent = State.friends.length;
 }
 
-// ---- Avatars ----
+// ============================================================
+//  AVATARS
+// ============================================================
 function avatarClass(user) {
+  if (user.username === BUDDY.username) return 'av-buddy';
+  if (user.username === TESTBOT.username) return 'av-bot';
   if (user.isBot) return 'av-bot';
   let h = 0;
-  const name = user.username || user;
+  const name = user.username || user || '';
   for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) | 0;
   return 'av-' + (Math.abs(h) % 8 + 1);
 }
+
 function avatarLetter(user) {
-  if (user.isBot) return '🤖';
+  if (user.username === TESTBOT.username) return '🤖';
+  if (user.username === BUDDY.username) return 'B';
   const name = (user.displayName || user.username || user || '?');
   return (name[0] || '?').toUpperCase();
 }
 
-// ---- Friends list ----
+// ============================================================
+//  FRIENDS LIST
+// ============================================================
 async function renderFriends() {
   const list = document.getElementById('friendsList');
   if (State.friends.length === 0) {
@@ -1115,6 +1418,7 @@ async function renderFriends() {
       <div class="empty-state-title">No friends yet</div>
       <div class="empty-state-text">
         Tap the <strong style="color:var(--accent);">+</strong> in the top right to find people to add.
+        ${State.inbox.length > 0 ? `<br/><br/>You have <strong style="color:var(--accent);">${State.inbox.length}</strong> friend request${State.inbox.length === 1 ? '' : 's'} waiting in your Inbox 📥` : ''}
       </div>
     </div>`;
     return;
@@ -1159,25 +1463,27 @@ async function friendItemHTML(username) {
     if (previewText.length > 40) previewText = previewText.slice(0, 40) + '…';
     timeText = formatPreviewTime(preview.lastTime);
   }
-  const botBadge = user.isBot ? '<span class="bot-tag">BOT</span>' : '';
+  const tag = user.isBot ? '<span class="bot-tag">BOT</span>' : '';
   return `<div class="row" data-user="${escapeHtml(username)}">
     <div class="avatar ${avatarClass(user)}">${avatarLetter(user)}</div>
     <div class="row-info">
-      <div class="row-name">${escapeHtml(user.displayName)}${botBadge}</div>
+      <div class="row-name">${escapeHtml(user.displayName)}${tag}</div>
       <div class="row-sub">${escapeHtml(previewText)}</div>
     </div>
     <div class="row-meta"><div class="row-time">${timeText}</div></div>
   </div>`;
 }
 
-// ---- Inbox ----
+// ============================================================
+//  INBOX
+// ============================================================
 async function renderInbox() {
   const list = document.getElementById('inboxList');
   if (State.inbox.length === 0) {
     list.innerHTML = `<div class="empty-state">
       <div class="emoji">📭</div>
       <div class="empty-state-title">Inbox is empty</div>
-      <div class="empty-state-text">Friend requests from other users will show up here.</div>
+      <div class="empty-state-text">Friend requests show up here when others add you.</div>
     </div>`;
     return;
   }
@@ -1186,11 +1492,11 @@ async function renderInbox() {
   for (const req of State.inbox) {
     const user = await getUser(req.from);
     if (!user) continue;
-    const botBadge = user.isBot ? '<span class="bot-tag">BOT</span>' : '';
+    const tag = user.isBot ? '<span class="bot-tag">BOT</span>' : '';
     html += `<div class="row no-click">
       <div class="avatar ${avatarClass(user)}">${avatarLetter(user)}</div>
       <div class="row-info">
-        <div class="row-name">${escapeHtml(user.displayName)}${botBadge}</div>
+        <div class="row-name">${escapeHtml(user.displayName)}${tag}</div>
         <div class="row-sub">@${escapeHtml(user.username)} · ${formatPreviewTime(req.t)}</div>
       </div>
       <div class="btn-group">
@@ -1223,16 +1529,59 @@ function updateInboxBadge() {
 
 async function acceptRequest(fromUsername) {
   const me = State.currentUser.username;
+  
+  // Add to my friends
   let myFriends = await getFriends(me);
   if (!myFriends.includes(fromUsername)) myFriends.push(fromUsername);
   await sSet('friends:' + me, JSON.stringify(myFriends));
+  
+  // Add to their friends
   let theirFriends = await getFriends(fromUsername);
   if (!theirFriends.includes(me)) theirFriends.push(me);
   await sSet('friends:' + fromUsername, JSON.stringify(theirFriends));
+  
+  // Remove from my inbox
   let inbox = await getInbox(me);
   inbox = inbox.filter(r => r.from !== fromUsername);
   await sSet('inbox:' + me, JSON.stringify(inbox));
+  
+  // Clean their sent-requests for me
+  const theirSentRaw = await sGet('sentRequests:' + fromUsername, false);
+  if (theirSentRaw) {
+    try {
+      let theirSent = JSON.parse(theirSentRaw);
+      theirSent = theirSent.filter(u => u !== me);
+      await sSet('sentRequests:' + fromUsername, JSON.stringify(theirSent), false);
+    } catch {}
+  }
+  
+  // Clean my sent-requests for them
+  const mySent = State.sentRequests.filter(u => u !== fromUsername);
+  await setSentRequests(mySent);
+  
+  // Update local state immediately
+  if (!State.friends.includes(fromUsername)) State.friends.push(fromUsername);
+  State.inbox = State.inbox.filter(r => r.from !== fromUsername);
+  
+  // If accepting Buddy, send a hello message and open chat
+  if (fromUsername === BUDDY.username) {
+    const key = chatKey(me, BUDDY.username);
+    const existingChat = await sGet(key);
+    if (!existingChat) {
+      const hello = {
+        from: BUDDY.username,
+        text: `Yay we're friends! 🎉 Send me anything and I'll reply!`,
+        t: Date.now(),
+      };
+      await saveMergedMessages(key, hello);
+    }
+  }
+  
   await refreshAll();
+  
+  // Auto-open chat after accepting
+  setTimeout(() => openChat(fromUsername), 200);
+  switchTab('chats');
 }
 
 async function declineRequest(fromUsername) {
@@ -1240,20 +1589,34 @@ async function declineRequest(fromUsername) {
   let inbox = await getInbox(me);
   inbox = inbox.filter(r => r.from !== fromUsername);
   await sSet('inbox:' + me, JSON.stringify(inbox));
+  
+  const theirSentRaw = await sGet('sentRequests:' + fromUsername, false);
+  if (theirSentRaw) {
+    try {
+      let theirSent = JSON.parse(theirSentRaw);
+      theirSent = theirSent.filter(u => u !== me);
+      await sSet('sentRequests:' + fromUsername, JSON.stringify(theirSent), false);
+    } catch {}
+  }
+  
+  State.inbox = State.inbox.filter(r => r.from !== fromUsername);
   await refreshAll();
 }
 
-// ---- Add friend sheet ----
+// ============================================================
+//  ADD FRIEND SHEET
+// ============================================================
 const sheet = document.getElementById('addFriendSheet');
 const backdrop = document.getElementById('backdrop');
 const editDialog = document.getElementById('editDialog');
+const bioDialog = document.getElementById('bioDialog');
 
 document.getElementById('addFriendBtn').addEventListener('click', openAddFriendSheet);
 document.getElementById('closeSheetBtn').addEventListener('click', closeAddFriendSheet);
-backdrop.addEventListener('click', () => { 
-  closeAddFriendSheet(); 
-  closeEditDialog(); 
-  if (typeof closeBioDialog === 'function') closeBioDialog();
+backdrop.addEventListener('click', () => {
+  closeAddFriendSheet();
+  closeEditDialog();
+  closeBioDialog();
 });
 
 async function openAddFriendSheet() {
@@ -1265,7 +1628,9 @@ async function openAddFriendSheet() {
 }
 function closeAddFriendSheet() {
   sheet.classList.remove('open');
-  if (!editDialog.classList.contains('open')) backdrop.classList.remove('open');
+  if (!editDialog.classList.contains('open') && !bioDialog.classList.contains('open')) {
+    backdrop.classList.remove('open');
+  }
 }
 
 document.getElementById('searchInput').addEventListener('input', e => {
@@ -1280,15 +1645,20 @@ async function renderSuggestions(query) {
   const allUsernames = await getAllUsernames();
   const myFriends = await getFriends(me);
   const myInbox = await getInbox(me);
+  const sentRequests = await getSentRequests();
   
   let candidates = allUsernames.filter(u => u !== me);
   
   if (query) {
-    candidates = await asyncFilter(candidates, async u => {
+    const filtered = [];
+    for (const u of candidates) {
       const user = await getUser(u);
-      if (!user) return false;
-      return u.includes(query) || (user.displayName || '').toLowerCase().includes(query);
-    });
+      if (!user) continue;
+      if (u.includes(query) || (user.displayName || '').toLowerCase().includes(query)) {
+        filtered.push(u);
+      }
+    }
+    candidates = filtered;
   }
   
   if (candidates.length === 0) {
@@ -1300,13 +1670,13 @@ async function renderSuggestions(query) {
     return;
   }
   
-  let html = `<div style="font-size:12px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.8px; margin-bottom:8px;">${query ? 'Results' : 'People you can add'}</div>`;
+  let html = `<div style="font-size:11px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.8px; margin-bottom:7px;">${query ? 'Results' : 'People you can add'}</div>`;
   html += '<div class="suggestions-list">';
   
-  // Bot first, then alphabetical
+  // Virtual users first, then alphabetical
   candidates.sort((a, b) => {
-    if (a === BOT_USERNAME) return -1;
-    if (b === BOT_USERNAME) return 1;
+    if (isVirtual(a) && !isVirtual(b)) return -1;
+    if (!isVirtual(a) && isVirtual(b)) return 1;
     return a.localeCompare(b);
   });
   
@@ -1316,8 +1686,7 @@ async function renderSuggestions(query) {
     
     const isFriend = myFriends.includes(username);
     const theySentMe = myInbox.find(r => r.from === username);
-    const theirInbox = await getInbox(username);
-    const iSentThem = theirInbox.find(r => r.from === me);
+    const iSentThem = sentRequests.includes(username);
     
     let actionHTML = '';
     if (isFriend) actionHTML = `<button class="pill-btn muted">✓ Friends</button>`;
@@ -1325,7 +1694,7 @@ async function renderSuggestions(query) {
     else if (iSentThem) actionHTML = `<button class="pill-btn muted">Pending</button>`;
     else actionHTML = `<button class="pill-btn primary" data-act="add" data-user="${escapeHtml(username)}">Add</button>`;
     
-    const botBadge = user.isBot ? '<span class="bot-tag">BOT</span>' : '';
+    const tag = user.isBot ? '<span class="bot-tag">BOT</span>' : '';
     const rowClass = user.isBot ? 'suggestion-row bot-row' : 'suggestion-row';
     const bioLine = (user.bio && user.bio.trim()) 
       ? `<div class="friend-bio">${escapeHtml(user.bio.trim())}</div>` 
@@ -1333,7 +1702,7 @@ async function renderSuggestions(query) {
     html += `<div class="${rowClass}">
       <div class="avatar ${avatarClass(user)}">${avatarLetter(user)}</div>
       <div class="row-info">
-        <div class="row-name">${escapeHtml(user.displayName)}${botBadge}</div>
+        <div class="row-name">${escapeHtml(user.displayName)}${tag}</div>
         <div class="row-sub">@${escapeHtml(user.username)}</div>
         ${bioLine}
       </div>
@@ -1347,9 +1716,15 @@ async function renderSuggestions(query) {
     btn.addEventListener('click', async () => {
       const act = btn.dataset.act;
       const username = btn.dataset.user;
-      if (act === 'add') await sendFriendRequest(username);
-      else if (act === 'accept') {
-        await acceptRequest(username);
+      btn.disabled = true;
+      btn.textContent = '...';
+      try {
+        if (act === 'add') await sendFriendRequest(username);
+        else if (act === 'accept') {
+          await acceptRequest(username);
+          closeAddFriendSheet();
+        }
+      } finally {
         const queryNow = document.getElementById('searchInput').value.trim().toLowerCase();
         await renderSuggestions(queryNow);
       }
@@ -1357,94 +1732,72 @@ async function renderSuggestions(query) {
   });
 }
 
-async function asyncFilter(arr, predicate) {
-  const results = await Promise.all(arr.map(predicate));
-  return arr.filter((_, i) => results[i]);
-}
-
 async function sendFriendRequest(targetUsername) {
   const me = State.currentUser.username;
-  
-  // Make sure bot exists in storage if we're targeting it
-  if (targetUsername === BOT_USERNAME) {
-    await ensureBotExists();
-  }
+  await ensureVirtualUsersExist();
   
   const target = await getUser(targetUsername);
-  if (!target) return;
-  
-  // Bot auto-accepts
-  if (target.isBot) {
-    // Set a personal flag — this is the source of truth that user has added the bot
-    await sSet('botAdded:' + me, '1', false);
-    
-    // Save to storage (bidirectional friendship)
-    let myFriends = await getFriends(me);
-    if (!myFriends.includes(targetUsername)) myFriends.push(targetUsername);
-    await sSet('friends:' + me, JSON.stringify(myFriends));
-    let botFriends = await getFriends(targetUsername);
-    if (!botFriends.includes(me)) botFriends.push(me);
-    await sSet('friends:' + targetUsername, JSON.stringify(botFriends));
-    
-    // Welcome message (only if no chat exists yet)
-    const key = chatKey(me, targetUsername);
-    const existingChat = await sGet(key);
-    let welcomeMsg = null;
-    if (!existingChat) {
-      welcomeMsg = {
-        from: targetUsername,
-        text: `Hey ${State.currentUser.displayName}! 👋 I'm Test Bot — your buddy for testing the chat system. Send me anything and I'll reply. Try asking me about 'friends', 'inbox', 'theme', or 'name'!`,
-        t: Date.now(),
-      };
-      // Use saveMergedMessages so it's race-safe
-      await saveMergedMessages(key, welcomeMsg);
-    } else {
-      // Pre-load existing messages into cache
-      try { State.messages[key] = JSON.parse(existingChat); } catch { State.messages[key] = []; }
-    }
-    
-    // Update local state DIRECTLY so bot shows up instantly
-    if (!State.friends.includes(targetUsername)) {
-      State.friends.push(targetUsername);
-    }
-    if (welcomeMsg) {
-      State.chatPreviews[targetUsername] = {
-        lastMsg: welcomeMsg.text,
-        lastTime: welcomeMsg.t,
-        fromMe: false,
-      };
-    }
-    State.userCache[targetUsername] = target;
-    
-    // Close the sheet
-    sheet.classList.remove('open');
-    backdrop.classList.remove('open');
-    
-    // Force show chats tab (without triggering refresh that could wipe state)
-    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === 'chats'));
-    document.getElementById('chatsTab').classList.remove('hidden');
-    document.getElementById('inboxTab').classList.add('hidden');
-    document.getElementById('profileTab').classList.add('hidden');
-    
-    // Re-render friends list with bot now in it
-    await renderFriends();
-    document.getElementById('profileFriendCount').textContent = State.friends.length;
-    
-    // After sheet slides down, open the chat
-    setTimeout(() => openChat(targetUsername), 320);
+  if (!target) {
+    document.getElementById('searchAlert').innerHTML = `<div class="alert show">User not found.</div>`;
     return;
   }
   
-  // Track sent requests in personal storage (race-safe, source of truth)
-  const sentRaw = await sGet('sentRequests:' + me, false);
-  let sent = [];
-  if (sentRaw) { try { sent = JSON.parse(sentRaw); } catch {} }
+  // Already friends?
+  const myFriends = await getFriends(me);
+  if (myFriends.includes(targetUsername)) {
+    document.getElementById('searchAlert').innerHTML = `<div class="alert show">You're already friends.</div>`;
+    return;
+  }
+  
+  // Already in my inbox? Just accept their request instead.
+  const myInbox = await getInbox(me);
+  if (myInbox.find(r => r.from === targetUsername)) {
+    await acceptRequest(targetUsername);
+    closeAddFriendSheet();
+    return;
+  }
+  
+  // Already sent?
+  const sent = await getSentRequests();
   if (sent.includes(targetUsername)) {
     document.getElementById('searchAlert').innerHTML = `<div class="alert show">Request already sent.</div>`;
     return;
   }
   
-  // Read-merge-write so we don't clobber other requests
+  // === TESTBOT: auto-accept ===
+  if (targetUsername === TESTBOT.username) {
+    if (!myFriends.includes(targetUsername)) myFriends.push(targetUsername);
+    await sSet('friends:' + me, JSON.stringify(myFriends));
+    
+    let botFriends = await getFriends(targetUsername);
+    if (!botFriends.includes(me)) botFriends.push(me);
+    await sSet('friends:' + targetUsername, JSON.stringify(botFriends));
+    
+    // Welcome message
+    const key = chatKey(me, targetUsername);
+    const existingChat = await sGet(key);
+    if (!existingChat) {
+      const welcome = {
+        from: targetUsername,
+        text: `Hey ${State.currentUser.displayName}! 👋 I'm Test Bot — I auto-accept friend requests so you can chat right away. Try adding 'Buddy' next — they act like a real user (request goes to your inbox).`,
+        t: Date.now(),
+      };
+      await saveMergedMessages(key, welcome);
+    }
+    
+    // Update local state immediately
+    if (!State.friends.includes(targetUsername)) State.friends.push(targetUsername);
+    State.userCache[targetUsername] = target;
+    
+    closeAddFriendSheet();
+    switchTab('chats');
+    await refreshAll();
+    setTimeout(() => openChat(targetUsername), 320);
+    return;
+  }
+  
+  // === Regular user / Buddy: send request to their inbox ===
+  // Read their current inbox, append, save (race-safe via merge attempt)
   const existingInboxRaw = await sGet('inbox:' + targetUsername);
   let theirInbox = [];
   if (existingInboxRaw) { try { theirInbox = JSON.parse(existingInboxRaw); } catch {} }
@@ -1453,17 +1806,22 @@ async function sendFriendRequest(targetUsername) {
     await sSet('inbox:' + targetUsername, JSON.stringify(theirInbox));
   }
   
-  // Add to sent-requests in personal storage
-  sent.push(targetUsername);
-  await sSet('sentRequests:' + me, JSON.stringify(sent), false);
+  // Track in my personal sent-requests
+  const newSent = [...sent, targetUsername];
+  await setSentRequests(newSent);
   
-  document.getElementById('searchAlert').innerHTML = `<div class="alert show">✓ Friend request sent to @${escapeHtml(targetUsername)}!</div>`;
+  // For Buddy: track when sent so they accept after delay
+  if (targetUsername === BUDDY.username) {
+    await sSet('buddyRequestAt:' + me, String(Date.now()), false);
+  }
   
-  const queryNow = document.getElementById('searchInput').value.trim().toLowerCase();
-  await renderSuggestions(queryNow);
+  document.getElementById('searchAlert').innerHTML = 
+    `<div class="alert show">✓ Friend request sent to @${escapeHtml(targetUsername)}!${targetUsername === BUDDY.username ? ' Buddy will accept in a few seconds...' : ''}</div>`;
 }
 
-// ---- Chat ----
+// ============================================================
+//  CHAT
+// ============================================================
 async function openChat(username) {
   const user = await getUser(username);
   if (!user) return;
@@ -1541,17 +1899,17 @@ async function sendMessage() {
   const otherUser = State.activeChat.username;
   const key = chatKey(State.currentUser.username, otherUser);
   
-  // Add to local cache and render IMMEDIATELY (no waiting for storage)
+  // Add to in-memory cache and render immediately
   const newMsg = { from: State.currentUser.username, text, t: Date.now() };
   if (!State.messages[key]) State.messages[key] = [];
   State.messages[key].push(newMsg);
   renderMessages(State.messages[key], true);
   
-  // Save with merge (handles race with bot reply or other writes)
+  // Save with merge
   await saveMergedMessages(key);
   
-  const otherUserData = await getUser(otherUser);
-  if (otherUserData && otherUserData.isBot) triggerBotReply(text);
+  // Trigger bot/buddy reply
+  if (isVirtual(otherUser)) triggerBotReply(otherUser, text);
 }
 
 document.getElementById('backBtn').addEventListener('click', closeChat);
@@ -1570,7 +1928,9 @@ function autosizeInput() {
   msgInput.style.height = Math.min(msgInput.scrollHeight, 100) + 'px';
 }
 
-// ---- Tabs ----
+// ============================================================
+//  TABS
+// ============================================================
 function switchTab(which) {
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === which));
   document.getElementById('chatsTab').classList.toggle('hidden', which !== 'chats');
@@ -1583,7 +1943,9 @@ document.querySelectorAll('.tab').forEach(t => {
   t.addEventListener('click', () => switchTab(t.dataset.tab));
 });
 
-// ---- Profile ----
+// ============================================================
+//  PROFILE
+// ============================================================
 function renderProfile() {
   const u = State.currentUser;
   document.getElementById('profileName').textContent = u.displayName;
@@ -1594,7 +1956,6 @@ function renderProfile() {
     .toLocaleDateString(undefined, { year:'numeric', month:'short', day:'numeric' });
   document.getElementById('profileFriendCount').textContent = State.friends.length;
   
-  // Bio in header (only if set)
   const headerBio = document.getElementById('profileHeaderBio');
   const bioText = (u.bio || '').trim();
   if (bioText) {
@@ -1605,7 +1966,6 @@ function renderProfile() {
     headerBio.classList.add('empty');
   }
   
-  // Bio row
   const bioVal = document.getElementById('profileBio');
   if (bioText) {
     bioVal.textContent = bioText;
@@ -1623,6 +1983,7 @@ function renderProfile() {
 
 document.getElementById('themeToggle').addEventListener('click', toggleTheme);
 
+// ---- Edit name ----
 document.getElementById('editNameBtn').addEventListener('click', () => {
   document.getElementById('editNameInput').value = State.currentUser.displayName;
   editDialog.classList.add('open');
@@ -1632,7 +1993,9 @@ document.getElementById('editNameBtn').addEventListener('click', () => {
 
 function closeEditDialog() {
   editDialog.classList.remove('open');
-  if (!sheet.classList.contains('open')) backdrop.classList.remove('open');
+  if (!sheet.classList.contains('open') && !bioDialog.classList.contains('open')) {
+    backdrop.classList.remove('open');
+  }
 }
 
 document.getElementById('cancelEditBtn').addEventListener('click', closeEditDialog);
@@ -1652,8 +2015,7 @@ document.getElementById('saveEditBtn').addEventListener('click', async () => {
   closeEditDialog();
 });
 
-// ---- Bio editing ----
-const bioDialog = document.getElementById('bioDialog');
+// ---- Edit bio ----
 const bioInput = document.getElementById('bioInput');
 const bioCharCount = document.getElementById('bioCharCount');
 
@@ -1673,12 +2035,8 @@ function closeBioDialog() {
 
 document.getElementById('editBioRow').addEventListener('click', openBioDialog);
 document.getElementById('cancelBioBtn').addEventListener('click', closeBioDialog);
-bioInput.addEventListener('input', () => {
-  bioCharCount.textContent = bioInput.value.length;
-});
-bioInput.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeBioDialog();
-});
+bioInput.addEventListener('input', () => { bioCharCount.textContent = bioInput.value.length; });
+bioInput.addEventListener('keydown', e => { if (e.key === 'Escape') closeBioDialog(); });
 
 document.getElementById('saveBioBtn').addEventListener('click', async () => {
   const newBio = bioInput.value.trim().slice(0, 120);
@@ -1689,15 +2047,20 @@ document.getElementById('saveBioBtn').addEventListener('click', async () => {
   closeBioDialog();
 });
 
+// ---- Logout ----
 document.getElementById('logoutBtn').addEventListener('click', () => {
   if (State.pollTimer) clearInterval(State.pollTimer);
   if (State.botReplyTimer) clearTimeout(State.botReplyTimer);
+  document.removeEventListener('visibilitychange', onVisibilityChange);
+  window.removeEventListener('focus', forceRefresh);
   State.currentUser = null;
   State.activeChat = null;
   State.friends = [];
   State.inbox = [];
   State.chatPreviews = {};
   State.userCache = {};
+  State.messages = {};
+  State.sentRequests = [];
   document.getElementById('chatScreen').classList.remove('open');
   document.getElementById('authScreen').classList.remove('hidden');
   document.getElementById('mainApp').classList.add('hidden');
@@ -1707,7 +2070,9 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
   switchTab('chats');
 });
 
-// ---- Helpers ----
+// ============================================================
+//  HELPERS
+// ============================================================
 function escapeHtml(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
     .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
@@ -1734,9 +2099,11 @@ function formatPreviewTime(t) {
   return d.toLocaleDateString(undefined, { month:'short', day:'numeric' });
 }
 
-// ---- Init ----
+// ============================================================
+//  INIT
+// ============================================================
 (async () => {
   await loadTheme();
-  await ensureBotExists();
+  await ensureVirtualUsersExist();
 })();
 </script>
